@@ -500,3 +500,31 @@ Node16/`.js`-Imports). Als Vorlage abgleichen, **nicht 1:1 kopieren** — mehrer
 unserer Regeln (z.B. Theme-Fields via `inheritedValuePropertyValuePaths` statt
 `hublParameters`) weichen bewusst von der naiven cms-react-Annahme ab.
 Update-Anleitung: `reference/cms-react/README.md`.
+
+---
+
+## 🎭 Visuelles Testen mit Playwright (MCP)
+
+Projekt-scoped MCP-Server in `.mcp.json` (committet → jeder Klon hat ihn). Gibt die
+`browser_*`-Tools: navigieren, Screenshot, klicken, Konsole/Netzwerk lesen. Gratis,
+lokal, Open Source (Microsoft), kein Konto. Damit nimmt die KI Module **wirklich im
+Browser** ab — die Ebene, die Lint/Test/tsc nicht abdecken.
+
+**Erststart pro Klon:** Claude Code fragt, ob dem Server vertraut wird → bestätigen, dann
+**Claude Code voll neu starten** (nicht nur reconnect), sonst sind die Tools nicht im Registry.
+Erster Lauf lädt Chromium (~93 MB, einmalig).
+
+**Nutzung:** Skill **`/visual-check <ModulName>`** (Dev-Server sicherstellen → Story/Preview
+rendern → Screenshot → Konsole → Islands klicken → berichten). Tools ggf. via `ToolSearch`
+`select:mcp__playwright__browser_*` laden.
+
+**Zwei Render-Oberflächen:**
+- Storybook-Story-Iframe: `http://localhost:3123/iframe.html?id=sections-<modul-klein>--<variante>&viewMode=story` (alle Varianten; IDs via `curl localhost:3123/index.json`).
+- SSR-Preview (produktionsnah): `http://hslocal.net:3000/preview/module/<ModulName>`.
+
+**Harmlose Konsolen-Meldungen ignorieren:** `favicon.ico 404`, `Failed to resolve module specifier "@hubspot/cms-components/config"`.
+
+**Kette Design→Modul→Test:** `/implement-design` (nutzt Figma-MCP `get_design_context`/`get_screenshot`)
+erstellt Module → endet mit `/visual-check` → Umsetzung gegen das Figma-Original abgleichen.
+
+Screenshots landen in `.playwright-mcp/` (ge-gitignored, nicht einchecken).

@@ -120,4 +120,16 @@ export const Default = moduleStory(Component, fields, {
 
 ---
 
-Setze das Design jetzt direkt um. Frage nicht nach — erstelle die Dateien sofort.
+## Abschluss: Verifizieren (Pflicht)
+
+Die Gesamt-Kette ist **Figma (Figma-MCP) → Modul → visueller Test**. Nach dem Erstellen:
+
+1. `cd src/theme/my-theme && npm run lint && npm test` — muss grün sein.
+2. **Visuelle Abnahme mit Playwright** via `/visual-check <ModulName>`: im Browser rendern,
+   Screenshot mit dem Figma-Original/Bild abgleichen, Konsole prüfen, Islands anklicken.
+   Abweichungen direkt nachbessern und erneut prüfen.
+3. Wenn ein Figma-Link vorliegt: Screenshot der Umsetzung gegen `get_screenshot` des Figma-Knotens halten und Layout/Abstände/Farben angleichen.
+
+---
+
+Setze das Design jetzt direkt um. Frage nicht nach — erstelle die Dateien sofort, dann verifiziere.

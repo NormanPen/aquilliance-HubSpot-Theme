@@ -50,6 +50,7 @@ Nach dem Start:
 | [Styling](docs/styling.md) | Tailwind CSS, ThemeProvider, Design Tokens |
 | [Module & Partials](docs/modules.md) | Struktur, neue Komponenten erstellen |
 | [Testing](docs/testing.md) | Vitest, React Testing Library, Storybook |
+| [Visuelles Testen](docs/visual-testing.md) | Playwright-MCP, visuelle Abnahme mit Claude, Figma→Modul→Test |
 
 ## Wichtige Befehle
 
