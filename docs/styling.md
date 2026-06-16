@@ -6,15 +6,27 @@ Dieses Projekt verwendet [Tailwind CSS v4](https://tailwindcss.com/docs) für al
 
 Damit Tailwind-Klassen in der lokalen Modul-Vorschau ([hslocal.net:3000](http://hslocal.net:3000)) sichtbar sind, **muss jede Komponente** ihren Inhalt in `<ThemeProvider>` wrappen.
 
+Module übergeben zusätzlich `hublParameters` — dadurch werden globale Theme-Farben und Fonts zur Laufzeit übernommen (siehe [Globale Theme-Fields](#globale-theme-fields)):
+
 ```tsx
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
-export function Component() {
+// Modul — mit hublParameters
+export function Component({ fieldValues, hublParameters }) {
   return (
-    <ThemeProvider>
+    <ThemeProvider hublParameters={hublParameters}>
       <div className="bg-aq-primary text-white p-8">
         Inhalt hier
       </div>
+    </ThemeProvider>
+  );
+}
+
+// Partial (Header, Footer) — ohne hublParameters, nutzt CSS-Defaults
+export default function Header() {
+  return (
+    <ThemeProvider>
+      <header>…</header>
     </ThemeProvider>
   );
 }
@@ -26,12 +38,75 @@ Der Dev Server rendert Module in Isolation — ohne Template-Kontext. `ThemeProv
 ```tsx
 // components/shared/ThemeProvider.tsx
 import { ReactNode } from 'react';
-import '../../styles/tailwind.css';   // ← einzige Stelle wo Tailwind importiert wird
+import '../../styles/tailwind.css';
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+export function ThemeProvider({ children, hublParameters }) {
+  const primary  = hublParameters?.brand_primary?.color;
+  const accent   = hublParameters?.brand_accent?.color;
+  const font     = hublParameters?.base_font?.font;
+  const fallback = hublParameters?.base_font?.fallback ?? 'sans-serif';
+
+  const overrides = [
+    primary && `--color-aq-primary: ${primary};`,
+    accent  && `--color-aq-accent: ${accent};`,
+    font    && `--font-sans: '${font}', ${fallback};`,
+  ].filter(Boolean).join(' ');
+
+  return (
+    <>
+      {overrides && <style>{`:root { ${overrides} }`}</style>}
+      {children}
+    </>
+  );
 }
 ```
+
+Wenn `hublParameters` nicht übergeben wird (z.B. in Partials), greift Tailwind auf die Default-Werte aus `styles/theme/colors.css` zurück.
+
+---
+
+## Globale Theme-Fields
+
+Die Datei `fields.json` im Theme-Root definiert globale Einstellungen, die im HubSpot Page Editor unter **"Theme-Einstellungen"** editierbar sind. Der ThemeProvider liest diese Werte aus `hublParameters` und überschreibt die Tailwind-CSS-Custom-Properties zur Laufzeit — damit funktionieren Klassen wie `bg-aq-primary` weiterhin, aber der Farbwert ist für den Editor änderbar.
+
+### Aktuelle Theme-Fields
+
+| Name | Typ | Default | Tailwind-Variable |
+|---|---|---|---|
+| `brand_primary` | Farbe | `#ff7a59` | `--color-aq-primary` |
+| `brand_accent` | Farbe | `#2d3e50` | `--color-aq-accent` |
+| `base_font` | Google Font | Inter | `--font-sans` |
+
+### Neues Theme-Field hinzufügen
+
+1. `fields.json` um ein Feld erweitern:
+
+```json
+{
+  "type": "color",
+  "name": "brand_secondary",
+  "label": "Sekundärfarbe",
+  "default": { "color": "#6366f1", "opacity": 100 }
+}
+```
+
+2. Entsprechenden Token in `styles/theme/colors.css` anlegen:
+
+```css
+@theme {
+  --color-aq-secondary: #6366f1;
+}
+```
+
+3. Im `ThemeProvider` die Überschreibung ergänzen:
+
+```tsx
+const secondary = hublParameters?.brand_secondary?.color;
+// …
+secondary && `--color-aq-secondary: ${secondary};`,
+```
+
+4. Tailwind-Klasse nutzen: `bg-aq-secondary`, `text-aq-secondary`
 
 ---
 

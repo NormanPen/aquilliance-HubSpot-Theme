@@ -1,11 +1,42 @@
 [
   {
-    "type": "Color",
-    "name": "brand_color",
-    "label": "Brand Color",
+    "type": "color",
+    "name": "brand_primary",
+    "label": "Primärfarbe",
+    "visibility": {
+      "hidden_subfields": {
+        "opacity": true
+      }
+    },
+    "default": {
+      "color": "#ff7a59",
+      "opacity": 100
+    }
+  },
+  {
+    "type": "color",
+    "name": "brand_accent",
+    "label": "Akzentfarbe (Dunkel)",
+    "visibility": {
+      "hidden_subfields": {
+        "opacity": true
+      }
+    },
     "default": {
       "color": "#2d3e50",
       "opacity": 100
+    }
+  },
+  {
+    "type": "font",
+    "name": "base_font",
+    "label": "Schriftart",
+    "load_external_fonts": "true",
+    "default": {
+      "font": "Inter",
+      "font_set": "GOOGLE",
+      "fallback": "sans-serif",
+      "google_font_variants": ["400", "400i", "600", "600i", "700"]
     }
   }
 ]

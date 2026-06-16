@@ -96,6 +96,49 @@ export const OhneSubline = moduleStory(Component, fields, {
 
 ---
 
+## Linting & Formatting
+
+### ESLint — TypeScript/React
+
+Prüft alle `.ts` und `.tsx` Dateien in `components/` auf Typfehler und React-Regeln:
+
+```bash
+# Aus dem Projekt-Root
+npm run lint
+```
+
+Konfiguration liegt in [src/theme/my-theme/eslint.config.js](../src/theme/my-theme/eslint.config.js). Aktive Plugins:
+
+| Plugin | Zweck |
+|---|---|
+| `@typescript-eslint` | TypeScript-Regeln |
+| `eslint-plugin-react` | React-Regeln (JSX, Props) |
+| `eslint-plugin-react-hooks` | Regeln für Hooks |
+
+> `@typescript-eslint/no-explicit-any` ist bewusst deaktiviert — HubSpot-Felder werden mit `any` typisiert.
+
+### Prettier — Formatierung
+
+Prüft Formatierung aller Dateien inkl. `.hubl.html` Templates:
+
+```bash
+npm run prettier
+```
+
+Das Paket `@hubspot/prettier-plugin-hubl` im Root ermöglicht das Formatieren von HubSpot-spezifischer HUBL-Syntax.
+
+### Übersicht aller Scripts
+
+| Befehl | Wo | Was es tut |
+|---|---|---|
+| `npm run start` | Root | Dev Server + Storybook starten |
+| `npm run lint` | Root | ESLint über alle Komponenten |
+| `npm run prettier` | Root | Format-Check inkl. HUBL |
+| `npm run test` | Root oder Theme | Vitest Unit-Tests ausführen |
+| `npm run deploy` | Root | Build + Upload zu HubSpot |
+
+---
+
 ## Auf HubSpot deployen
 
 ```bash

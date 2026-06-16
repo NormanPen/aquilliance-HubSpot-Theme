@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "cd src/theme/my-theme && npm start",
+    "lint": "cd src/theme/my-theme && npm run lint",
     "prettier": "prettier . --check",
     "deploy": "hs project upload"
   },
