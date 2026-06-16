@@ -1,1 +1,4 @@
 node_modules
+src/theme/my-theme/node_modules
+dist
+.DS_Store
