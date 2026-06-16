@@ -9,8 +9,8 @@ import logo from '../../../assets/sprocket.svg';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
 export function Component({ fieldValues, hublParameters }: { fieldValues: any; hublParameters: any }) {
-  const { src, alt, width, height } = fieldValues.logo;
-  const { brandColors } = hublParameters;
+  const { src, alt, width, height } = fieldValues.logo ?? {};
+  const { brandColors } = hublParameters ?? {};
 
   return (
     <ThemeProvider>
@@ -21,7 +21,7 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
           opacity: brandColors?.opacity,
         }}
       >
-        <img src={src} alt={alt} width={width} height={height} />
+        <img src={src || logo} alt={alt || 'Logo'} width={width || 100} height={height || 100} />
         <h1>{fieldValues.headline}</h1>
         <RichText fieldPath="gettingStarted" />
         <div className="flex gap-5 items-center justify-center mt-6">
