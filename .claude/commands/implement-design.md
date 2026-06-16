@@ -9,6 +9,13 @@ Identifiziere:
 - Welche Inhaltsbereiche gibt es? (Überschrift, Text, Bild, Button, Liste, etc.)
 - Welche Bereiche soll der HubSpot-Editor ändern können?
 - Gibt es klar trennbare Sektionen → mehrere Module? Oder eine zusammenhängende Sektion → ein Modul?
+- **Passt ein bestehendes Modul?** Vor dem Neubau prüfen, ob `HeroSection`, `FeatureGrid`, `CtaBanner`, `Testimonials`, `RichMediaSection` oder `FaqAccordion` das Muster schon abdecken (ggf. nur anpassen).
+- **Wiederholt sich ein Element** (Karten, Logos, Schritte)? → `RepeatedFieldGroup`.
+
+## Bausteine wiederverwenden
+
+- **UI-Primitives** (`components/ui/`): `Section`, `Container`, `Heading`, `Text`, `Button` — IMMER zuerst nutzen statt Inline-Tailwind. Import: `import { Section, Container, Heading, Text, Button } from '../../ui/index.js';`
+- **Referenz**: Offizielle Patterns liegen lokal unter `reference/cms-react/examples/` — bei Unsicherheit (Islands, Daten-Fetching) dort nachschauen.
 
 ---
 
@@ -20,7 +27,7 @@ Identifiziere:
 | Fließtext/Paragraph | `TextField` oder `RichTextField` |
 | HTML-Inhalt mit Formatierung | `RichTextField` + `<RichText fieldPath="..." />` |
 | Bild | `ImageField` mit `resizable={true}` |
-| Button-Text + URL | `TextField` (Label) + `URLField` (URL) oder `GroupField` |
+| Button-Text + URL | `TextField` (Label) + `UrlField` (URL) oder `GroupField` |
 | Toggle/Feature an/aus | `BooleanField` mit `display="toggle"` |
 | Farbe editierbar | `ColorField` |
 | Auswahl (Layout, Stil) | `ChoiceField` mit `choices={[['wert', 'Label'], ...]}` |
@@ -53,7 +60,7 @@ Identifiziere:
 ## Modul-Template
 
 ```tsx
-import { ModuleFields, TextField, ImageField, URLField, BooleanField, ChoiceField, RichTextField, ColorField, GroupField, NumberField } from '@hubspot/cms-components/fields';
+import { ModuleFields, TextField, ImageField, UrlField, BooleanField, ChoiceField, RichTextField, ColorField, GroupField, NumberField } from '@hubspot/cms-components/fields';
 import { RichText } from '@hubspot/cms-components';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
@@ -113,4 +120,16 @@ export const Default = moduleStory(Component, fields, {
 
 ---
 
-Setze das Design jetzt direkt um. Frage nicht nach — erstelle die Dateien sofort.
+## Abschluss: Verifizieren (Pflicht)
+
+Die Gesamt-Kette ist **Figma (Figma-MCP) → Modul → visueller Test**. Nach dem Erstellen:
+
+1. `cd src/theme/my-theme && npm run lint && npm test` — muss grün sein.
+2. **Visuelle Abnahme mit Playwright** via `/visual-check <ModulName>`: im Browser rendern,
+   Screenshot mit dem Figma-Original/Bild abgleichen, Konsole prüfen, Islands anklicken.
+   Abweichungen direkt nachbessern und erneut prüfen.
+3. Wenn ein Figma-Link vorliegt: Screenshot der Umsetzung gegen `get_screenshot` des Figma-Knotens halten und Layout/Abstände/Farben angleichen.
+
+---
+
+Setze das Design jetzt direkt um. Frage nicht nach — erstelle die Dateien sofort, dann verifiziere.

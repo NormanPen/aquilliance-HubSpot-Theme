@@ -86,7 +86,6 @@ export const OhneSubline = moduleStory(Component, fields, {
 ### Storybook Titel-Konventionen
 
 ```
-'Demo/...'        → Demo-Komponenten (GettingStarted etc.)
 'Sections/...'    → Module aus components/modules/sections/
 'Elements/...'    → Module aus components/modules/elements/
 'Navigation/...'  → Module aus components/modules/navigation/

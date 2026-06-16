@@ -1,17 +1,63 @@
-import { ModuleFields } from '@hubspot/cms-components/fields';
+import { ModuleFields, TextField, UrlField, RepeatedFieldGroup } from '@hubspot/cms-components/fields';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
+import { Section, Container, Text } from '../../ui/index.js';
 
-export function Component({ hublParameters }: { hublParameters: any }) {
+export function Component({ fieldValues, hublParameters }: { fieldValues: any; hublParameters: any }) {
+  const { company_name, tagline, links, copyright } = fieldValues ?? {};
+  const navLinks = links ?? [];
+
   return (
     <ThemeProvider hublParameters={hublParameters}>
-      <footer className="w-full bg-[#2d3e50] px-8 py-4 text-center">
-        <h1 className="text-white text-2xl font-sans m-0">Footer</h1>
-      </footer>
+      <Section as="footer" bg="accent" padding="md">
+        <Container>
+          <div className="flex flex-col items-center gap-6 text-center md:flex-row md:items-start md:justify-between md:text-left">
+            <div>
+              <div className="font-sans text-xl font-bold text-white">{company_name || 'Unternehmen'}</div>
+              {tagline && <Text size="sm" className="mt-1 text-white/70">{tagline}</Text>}
+            </div>
+            {navLinks.length > 0 && (
+              <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                {navLinks.map((item: any, i: number) => (
+                  <a
+                    key={i}
+                    href={item?.url?.href ?? '#'}
+                    className="font-sans text-sm text-white/80 no-underline transition-colors hover:text-white"
+                  >
+                    {item?.label}
+                  </a>
+                ))}
+              </nav>
+            )}
+          </div>
+          <div className="mt-8 border-t border-white/15 pt-6 text-center">
+            <Text size="sm" className="text-white/60">{copyright}</Text>
+          </div>
+        </Container>
+      </Section>
     </ThemeProvider>
   );
 }
 
-export const fields = <ModuleFields>{null}</ModuleFields>;
+export const fields = (
+  <ModuleFields>
+    <TextField name="company_name" label="Firmenname" default="Unternehmen" />
+    <TextField name="tagline" label="Tagline" default="Ein kurzer Claim." />
+    <RepeatedFieldGroup
+      name="links"
+      label="Footer-Links"
+      occurrence={{ min: 0, max: 12 }}
+      default={[
+        { label: 'Impressum', url: { href: '#', type: 'EXTERNAL' } },
+        { label: 'Datenschutz', url: { href: '#', type: 'EXTERNAL' } },
+        { label: 'Kontakt', url: { href: '#', type: 'EXTERNAL' } },
+      ]}
+    >
+      <TextField name="label" label="Text" default="Link" />
+      <UrlField name="url" label="URL" supportedTypes={['EXTERNAL', 'CONTENT', 'EMAIL_ADDRESS', 'FILE']} default={{ href: '#', type: 'EXTERNAL' }} />
+    </RepeatedFieldGroup>
+    <TextField name="copyright" label="Copyright" default="© 2025 Unternehmen. Alle Rechte vorbehalten." />
+  </ModuleFields>
+);
 
 export const meta = {
   label: 'Footer',

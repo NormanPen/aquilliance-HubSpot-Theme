@@ -84,6 +84,8 @@ Der Dev Server crasht mit `EISDIR` wenn er Unterordner findet.
 ### 6. Beim Erstellen eines Moduls immer auch `.stories.jsx` erstellen
 Ohne separate Nachfrage. Story-Dateien enden auf `.stories.jsx` (nicht `.tsx`).
 Storybook-Titel-Konventionen: `'Sections/...'`, `'Elements/...'`, `'Navigation/...'`, `'Partials/...'`, `'UI/...'`
+- ⚠️ In Story-Dateien relative Imports mit **echter Extension** schreiben (`'./index.tsx'`, `'../shared/ThemeProvider.tsx'`) — Storybooks Vite macht die `.js`→`.tsx`-Auflösung NICHT (anders als der SSR-Build). Mit `.js` → „Failed to resolve import / Failed to fetch dynamically imported module".
+- ⚠️ `<RichText fieldPath>` rendert in Storybook NICHT (Feld bleibt leer); in der SSR-Vorschau (`/preview/module/`) und live aber schon. Für Storybook-Sichtbarkeit eines Textes ggf. `TextField` statt `RichTextField`.
 
 ### 7. Tailwind Build-Pakete gehören in `dependencies`
 HubSpot's Cloud-Build läuft `npm install --omit=dev`. Diese Pakete müssen in `dependencies`:
@@ -310,10 +312,15 @@ Alle Imports aus `@hubspot/cms-components/fields`.
 // Zugriff: const { src, alt, width, height } = fieldValues?.image ?? {};
 ```
 
-### URLField
+### UrlField
 ```tsx
-<URLField name="cta_url" label="Link" default={{ href: '#', type: 'EXTERNAL' }} />
+<UrlField
+  name="cta_url" label="Link"
+  supportedTypes={['EXTERNAL', 'CONTENT', 'EMAIL_ADDRESS', 'FILE']}
+  default={{ href: '#', type: 'EXTERNAL' }}
+/>
 // Zugriff: fieldValues?.cta_url?.href
+// ⚠️ Export heißt UrlField (nicht URLField). `supportedTypes` ist vom TS-Typ verlangt.
 ```
 
 ### NumberField
@@ -359,10 +366,55 @@ Alle Imports aus `@hubspot/cms-components/fields`.
 import { GroupField } from '@hubspot/cms-components/fields';
 <GroupField name="cta" label="Button">
   <TextField name="label" label="Text" default="Jetzt starten" />
-  <URLField name="url" label="URL" default={{ href: '#', type: 'EXTERNAL' }} />
+  <UrlField name="url" label="URL" default={{ href: '#', type: 'EXTERNAL' }} />
 </GroupField>
 // Zugriff: const { label, url } = fieldValues?.cta ?? {};
 ```
+
+### RepeatedFieldGroup (wiederholbare Einträge — Features, FAQ, Testimonials)
+```tsx
+import { RepeatedFieldGroup } from '@hubspot/cms-components/fields';
+<RepeatedFieldGroup name="features" label="Features" occurrence={{ min: 1, max: 12, default: 3 }}>
+  <ImageField name="icon" label="Icon" resizable={true} default={{ src: '', alt: '', width: 0, height: 0 }} />
+  <TextField name="title" label="Titel" default="Titel" />
+  <TextField name="text" label="Text" default="Beschreibung" />
+</RepeatedFieldGroup>
+// Zugriff: const items = fieldValues?.features ?? [];  → Array von { icon, title, text }
+// In Story: fieldValues.features = [{ icon:{src,alt,width,height}, title, text }, ...]
+// ⚠️ In wiederholten Items KEIN <RichText fieldPath>/<Icon fieldPath> (Index-Pfad-Problem) —
+//    plain TextField/ImageField nutzen und aus item.* rendern.
+```
+
+### Field Visibility (Felder bedingt ein-/ausblenden)
+```tsx
+<ChoiceField name="layout" label="Layout" default="grid" choices={[['grid','Grid'],['slider','Slider']]} />
+<NumberField
+  name="columns" label="Spalten" default={3}
+  visibility={{ controlling_field_path: 'layout', controlling_value_regex: 'grid', operator: 'EQUAL' }}
+/>
+```
+
+---
+
+## UI-Primitives (`components/ui/`) — IMMER zuerst wiederverwenden
+
+Statt in jedem Modul Inline-Tailwind-Klassen zu wiederholen, die geteilten Bausteine nutzen.
+Import: `import { Section, Container, Heading, Text, Button } from '../../ui/index.js';`
+
+| Primitive | Props (Auswahl) | Zweck |
+|---|---|---|
+| `Section` | `bg` (`none`/`white`/`gray`/`accent`/`primary`), `padding` (`sm`/`md`/`lg`), `as`, `style` | Vollbreite Sektion + Hintergrund + vertikales Padding |
+| `Container` | `size` (`sm`/`md`/`lg`/`full`), `as` | Zentrierter Wrapper mit Maximalbreite + horizontalem Padding |
+| `Heading` | `level` (1–6), `as` | Responsive, token-basierte Überschrift |
+| `Text` | `size` (`sm`/`base`/`lg`/`xl`), `muted` | Absatz |
+| `Button` | `href`, `variant` (`primary`/`secondary`/`outline`/`ghost`), `size`, `style` | Link-Button für CTAs |
+
+**Regeln:**
+- Primitives wrappen sich NICHT in `<ThemeProvider>` — das macht das umgebende Modul.
+- Dynamische Werte (editierbare Farben aus `fieldValues`) über `style={{}}` an `Section`/`Button` geben, nicht über Klassen.
+- Neue gängige Bausteine (Card, Badge …) gehören hierher, nicht copy-paste ins Modul.
+- Aufbau eines Moduls: `<ThemeProvider><Section><Container>…Heading/Text/Button…</Container></Section></ThemeProvider>`.
+- Vorlagen-Module mit Repeatern/Primitives: `HeroSection`, `FeatureGrid`, `CtaBanner`, `Testimonials`, `RichMediaSection`, `FaqAccordion` (Island).
 
 ---
 
@@ -448,3 +500,31 @@ Node16/`.js`-Imports). Als Vorlage abgleichen, **nicht 1:1 kopieren** — mehrer
 unserer Regeln (z.B. Theme-Fields via `inheritedValuePropertyValuePaths` statt
 `hublParameters`) weichen bewusst von der naiven cms-react-Annahme ab.
 Update-Anleitung: `reference/cms-react/README.md`.
+
+---
+
+## 🎭 Visuelles Testen mit Playwright (MCP)
+
+Projekt-scoped MCP-Server in `.mcp.json` (committet → jeder Klon hat ihn). Gibt die
+`browser_*`-Tools: navigieren, Screenshot, klicken, Konsole/Netzwerk lesen. Gratis,
+lokal, Open Source (Microsoft), kein Konto. Damit nimmt die KI Module **wirklich im
+Browser** ab — die Ebene, die Lint/Test/tsc nicht abdecken.
+
+**Erststart pro Klon:** Claude Code fragt, ob dem Server vertraut wird → bestätigen, dann
+**Claude Code voll neu starten** (nicht nur reconnect), sonst sind die Tools nicht im Registry.
+Erster Lauf lädt Chromium (~93 MB, einmalig).
+
+**Nutzung:** Skill **`/visual-check <ModulName>`** (Dev-Server sicherstellen → Story/Preview
+rendern → Screenshot → Konsole → Islands klicken → berichten). Tools ggf. via `ToolSearch`
+`select:mcp__playwright__browser_*` laden.
+
+**Zwei Render-Oberflächen:**
+- Storybook-Story-Iframe: `http://localhost:3123/iframe.html?id=sections-<modul-klein>--<variante>&viewMode=story` (alle Varianten; IDs via `curl localhost:3123/index.json`).
+- SSR-Preview (produktionsnah): `http://hslocal.net:3000/preview/module/<ModulName>`.
+
+**Harmlose Konsolen-Meldungen ignorieren:** `favicon.ico 404`, `Failed to resolve module specifier "@hubspot/cms-components/config"`.
+
+**Kette Design→Modul→Test:** `/implement-design` (nutzt Figma-MCP `get_design_context`/`get_screenshot`)
+erstellt Module → endet mit `/visual-check` → Umsetzung gegen das Figma-Original abgleichen.
+
+Screenshots landen in `.playwright-mcp/` (ge-gitignored, nicht einchecken).

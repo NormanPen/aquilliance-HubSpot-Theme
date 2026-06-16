@@ -41,6 +41,23 @@ Nach dem Start:
 > **Hinweis:** `hslocal.net` muss einmalig in der Hosts-Datei eingetragen werden.  
 > Siehe [Setup-Dokumentation](docs/setup.md#hslocal-net-konfigurieren).
 
+### 6. Playwright (visuelles Testen) aktivieren — einmalig
+
+Das Repo bringt einen **Headless-Browser** mit, mit dem Claude Module visuell abnehmen kann.
+Den MCP-Server musst du **nicht manuell starten** — Claude Code startet ihn automatisch aus der
+mitgelieferten `.mcp.json`. Du musst nur **einmal pro Klon**:
+
+1. Claude Code im Projekt öffnen → beim Start fragt es, ob dem MCP-Server `playwright` aus
+   `.mcp.json` **vertraut** werden soll → **bestätigen**.
+2. Claude Code **einmal vollständig neu starten** (kein bloßer Reconnect), damit die Browser-Tools
+   geladen werden. Der erste Lauf lädt Chromium (~93 MB, einmalig).
+3. Mit `/mcp` prüfen: `playwright` = „connected".
+
+Danach: Dev-Server laufen lassen (`npm run start`) und Claude bitten:
+**„mach die visuelle Abnahme von HeroSection"** bzw. `/visual-check HeroSection`.
+
+→ Volle Anleitung & Workflow (Figma → Modul → Test): [Visuelles Testen](docs/visual-testing.md).
+
 ## Dokumentation
 
 | Dokument | Inhalt |
@@ -50,6 +67,7 @@ Nach dem Start:
 | [Styling](docs/styling.md) | Tailwind CSS, ThemeProvider, Design Tokens |
 | [Module & Partials](docs/modules.md) | Struktur, neue Komponenten erstellen |
 | [Testing](docs/testing.md) | Vitest, React Testing Library, Storybook |
+| [Visuelles Testen](docs/visual-testing.md) | Playwright-MCP, visuelle Abnahme mit Claude, Figma→Modul→Test |
 
 ## Wichtige Befehle
 
@@ -58,3 +76,43 @@ npm run start        # Dev Server + Storybook starten
 npm run deploy       # Theme auf HubSpot hochladen
 npm test             # Tests ausführen (aus src/theme/my-theme/)
 ```
+
+## Diese Basis-Vorlage für ein Kundenprojekt nutzen
+
+Dieses Repo ist eine **wiederverwendbare Grundlage**: pro Kunde klonen, brandspezifisch anpassen,
+dann mit Claude Code Designs schnell in Module/Templates umsetzen.
+
+**Schritte beim Aufsetzen (oder per `/new-customer` von Claude erledigen lassen):**
+1. **Brand-Farben & Schrift** in [`src/theme/my-theme/fields.json`](src/theme/my-theme/fields.json) setzen
+   (`brand_primary`, `brand_accent`, `base_font`) — und die Default-Fallbacks in
+   [`styles/theme/colors.css`](src/theme/my-theme/styles/theme/colors.css) /
+   [`templates/layouts/base.hubl.html`](src/theme/my-theme/templates/layouts/base.hubl.html).
+2. **Hero-/Footer-Defaults** (Texte, Firmenname, Copyright) an den Kunden anpassen.
+3. **Nicht benötigte Starter-Module** löschen (siehe unten) — sie sind Beispiele, kein Pflichtinventar.
+4. Designs umsetzen: `/implement-design <Figma-Link|Bild>` oder `/create-module <Name>`.
+
+## Komponenten-Bibliothek
+
+**UI-Primitives** (`components/ui/`) — wiederverwendbare Bausteine, die Module statt Inline-Klassen nutzen:
+
+| Primitive | Zweck |
+|---|---|
+| `Section` | Vollbreite Sektion mit Token-Hintergrund (`white`/`gray`/`accent`/`primary`) + vertikalem Padding |
+| `Container` | Zentrierter Wrapper mit Maximalbreite (`sm`/`md`/`lg`/`full`) |
+| `Heading` | `h1`–`h6` mit responsiver, token-basierter Größe |
+| `Text` | Absatz mit Größen + gedämpfter Variante |
+| `Button` | Link-Button (CTA) mit Varianten (`primary`/`secondary`/`outline`/`ghost`) |
+
+Import in Modulen: `import { Section, Container, Heading, Text, Button } from '../../ui/index.js';`
+
+**Starter-Module** (`components/modules/`) — fertige Sektionen als Ausgangspunkt:
+
+| Modul | Beschreibung |
+|---|---|
+| `Header` / `Footer` | Globale Navigation & Fußbereich |
+| `HeroSection` | Hero mit Überschrift, Subline, CTA, Ausrichtung |
+| `FeatureGrid` | Feature-Raster mit Repeater + Spaltenwahl |
+| `CtaBanner` | Aufmerksamkeits-Banner mit Button |
+| `Testimonials` | Kundenstimmen-Raster (Repeater) |
+| `RichMediaSection` | Text + Bild, Layout links/rechts (Rich-Text) |
+| `FaqAccordion` | Aufklappbare FAQ (interaktive Island) |

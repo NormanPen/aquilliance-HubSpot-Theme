@@ -7,17 +7,20 @@ Erstelle folgende zwei Dateien:
 Verwende dieses exakte Template und passe es an den Modulnamen und den Anwendungsfall an:
 
 ```tsx
-import { ModuleFields, TextField, ImageField } from '@hubspot/cms-components/fields';
+import { ModuleFields, TextField } from '@hubspot/cms-components/fields';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
+import { Section, Container, Heading } from '../../ui/index.js';
 
 export function Component({ fieldValues, hublParameters }: { fieldValues: any; hublParameters: any }) {
   const { headline } = fieldValues ?? {};
 
   return (
     <ThemeProvider hublParameters={hublParameters}>
-      <section className="w-full bg-aq-accent py-20 px-8 text-center">
-        <h1 className="text-white text-5xl font-bold font-sans">{headline}</h1>
-      </section>
+      <Section bg="white" padding="lg">
+        <Container>
+          <Heading level={2} className="text-center">{headline}</Heading>
+        </Container>
+      </Section>
     </ThemeProvider>
   );
 }
@@ -30,6 +33,8 @@ export const fields = (
 
 export const meta = { label: '$ARGUMENTS' };
 ```
+
+**ZUERST die UI-Primitives wiederverwenden** (`import { Section, Container, Heading, Text, Button } from '../../ui/index.js'`) statt Inline-Tailwind zu wiederholen. Bestehende Module wie `FeatureGrid`/`Testimonials` als Vorlage ansehen.
 
 **Pflichtregeln für index.tsx:**
 - Import-Pfade immer mit `.js`-Extension: `'../../shared/ThemeProvider.js'`
@@ -45,12 +50,14 @@ export const meta = { label: '$ARGUMENTS' };
 - `TextField` — einfacher Text
 - `RichTextField` — HTML-Richtext (im JSX rendern mit `<RichText fieldPath="name" />` aus `@hubspot/cms-components`)
 - `ImageField` — Bild mit `resizable={true}`, default: `{ src: '', alt: '', width: 0, height: 0 }`
-- `URLField` — Link, default: `{ href: '#', type: 'EXTERNAL' }`, Zugriff: `.href`
+- `UrlField` — Link (Export heißt `UrlField`, nicht `URLField`), `supportedTypes={['EXTERNAL','CONTENT','EMAIL_ADDRESS','FILE']}`, default: `{ href: '#', type: 'EXTERNAL' }`, Zugriff: `.href`
 - `NumberField` — Zahl mit `min`, `max`
 - `BooleanField` — Toggle, `display="toggle"` oder `"checkbox"`
 - `ChoiceField` — Auswahl, `choices={[['value', 'Label'], ...]}`, `display="radio"|"select"|"buttons"`
 - `ColorField` — Farbe mit Opacity, default: `{ color: '#ffffff', opacity: 100 }`
-- `GroupField` — Felder gruppieren: `<GroupField name="cta" label="Button"><TextField .../><URLField .../></GroupField>`
+- `GroupField` — Felder gruppieren: `<GroupField name="cta" label="Button"><TextField .../><UrlField .../></GroupField>`
+- `RepeatedFieldGroup` — wiederholbare Einträge (Features/FAQ/Testimonials): `occurrence={{ min, max, default }}`, Zugriff als Array über `fieldValues.NAME`. In Items kein `<RichText fieldPath>`/`<Icon fieldPath>` — plain Felder nutzen.
+- Bedingte Felder: `visibility={{ controlling_field_path, controlling_value_regex, operator: 'EQUAL' }}`
 
 ---
 
