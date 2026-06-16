@@ -4,6 +4,7 @@
   "description": "CMS React starter theme",
   "scripts": {
     "start": "hs-cms-dev-server . --storybook",
+    "test": "vitest",
     "deploy": "hs project upload"
   },
   "type": "module",
@@ -15,8 +16,14 @@
   "devDependencies": {
     "@hubspot/cms-dev-server": "latest",
     "@tailwindcss/postcss": "^4.3.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^14.3.1",
+    "@testing-library/user-event": "^14.6.1",
     "autoprefixer": "^10.5.0",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
-    "tailwindcss": "^4.3.1"
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.3.1",
+    "vitest": "^4.1.9"
   }
 }

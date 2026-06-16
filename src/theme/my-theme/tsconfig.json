@@ -11,8 +11,8 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "skipLibCheck": true,
-    "types": ["vite/client"]
+    "types": ["vite/client", "vitest/globals"]
   },
-  "include": ["components/**/*"],
+  "include": ["components/**/*", "vitest.setup.ts"],
   "exclude": ["node_modules"]
 }
