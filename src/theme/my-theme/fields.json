@@ -1,42 +1,68 @@
 [
   {
-    "type": "color",
-    "name": "brand_primary",
-    "label": "Primärfarbe",
-    "visibility": {
-      "hidden_subfields": {
-        "opacity": true
+    "label": "Farben",
+    "name": "group_colors",
+    "type": "group",
+    "display": "inline",
+    "children": [
+      {
+        "label": "Primärfarbe",
+        "name": "brand_primary",
+        "type": "color",
+        "visibility": {
+          "hidden_subfields": {
+            "opacity": true
+          }
+        },
+        "default": {
+          "color": "#ff7a59",
+          "opacity": 100
+        }
+      },
+      {
+        "label": "Akzentfarbe (Dunkel)",
+        "name": "brand_accent",
+        "type": "color",
+        "visibility": {
+          "hidden_subfields": {
+            "opacity": true
+          }
+        },
+        "default": {
+          "color": "#2d3e50",
+          "opacity": 100
+        }
       }
-    },
-    "default": {
-      "color": "#ff7a59",
-      "opacity": 100
-    }
+    ]
   },
   {
-    "type": "color",
-    "name": "brand_accent",
-    "label": "Akzentfarbe (Dunkel)",
-    "visibility": {
-      "hidden_subfields": {
-        "opacity": true
+    "label": "Schrift",
+    "name": "group_fonts",
+    "type": "group",
+    "display": "inline",
+    "children": [
+      {
+        "label": "Schriftart",
+        "name": "base_font",
+        "type": "font",
+        "visibility": {
+          "hidden_subfields": {
+            "color": true,
+            "bold": true,
+            "italic": true,
+            "size": true,
+            "styles": true,
+            "variant": true
+          }
+        },
+        "load_external_fonts": "true",
+        "default": {
+          "font": "Inter",
+          "font_set": "GOOGLE",
+          "fallback": "sans-serif",
+          "google_font_variants": ["400", "400i", "600", "600i", "700"]
+        }
       }
-    },
-    "default": {
-      "color": "#2d3e50",
-      "opacity": 100
-    }
-  },
-  {
-    "type": "font",
-    "name": "base_font",
-    "label": "Schriftart",
-    "load_external_fonts": "true",
-    "default": {
-      "font": "Inter",
-      "font_set": "GOOGLE",
-      "fallback": "sans-serif",
-      "google_font_variants": ["400", "400i", "600", "600i", "700"]
-    }
+    ]
   }
 ]

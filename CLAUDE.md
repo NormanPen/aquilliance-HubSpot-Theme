@@ -155,8 +155,7 @@ export function ThemeProvider({ children, hublParameters }: {
 })
 ```
 
-Liest aus `hublParameters`: `brand_primary.color`, `brand_accent.color`, `base_font.font/fallback`  
-Schreibt CSS Custom Properties auf `:root` → Tailwind-Klassen wie `bg-aq-primary` werden dynamisch überschrieben.
+**WICHTIG:** `hublParameters` enthält in HubSpot CMS Projects NUR Modul-Metadaten (`module_id`, `field_types`, `path`) — KEINE Theme-Fields. ThemeProvider hat deshalb keinen Effekt auf Farben/Fonts aus `fields.json`. Für Theme-Farben in Modulen → `inheritedValuePropertyValuePaths` verwenden (siehe unten).
 
 ---
 
@@ -193,13 +192,43 @@ Schreibt CSS Custom Properties auf `:root` → Tailwind-Klassen wie `bg-aq-prima
 
 ## Globale Theme-Fields (`fields.json`)
 
-Diese Felder erscheinen im HubSpot Backend unter „Theme-Einstellungen" und kommen in jedem Modul als `hublParameters` an.
+Theme-Fields erscheinen im HubSpot Backend unter „Theme-Einstellungen". Sie kommen **NICHT** über `hublParameters` in Module — diese Annahme war falsch. Der korrekte Weg: `inheritedValuePropertyValuePaths` im Modul-Field.
 
-| Feldname | Typ | Default | Zugriff in Komponente |
-|---|---|---|---|
-| `brand_primary` | color | `#ff7a59` | `hublParameters?.brand_primary?.color` |
-| `brand_accent` | color | `#2d3e50` | `hublParameters?.brand_accent?.color` |
-| `base_font` | font | Inter | `hublParameters?.base_font?.font` |
+**fields.json Struktur** (Felder müssen in Gruppen liegen, kein Root-Level):
+```json
+[
+  { "name": "group_colors", "type": "group", "children": [
+    { "name": "brand_primary", "type": "color", ... },
+    { "name": "brand_accent",  "type": "color", ... }
+  ]},
+  { "name": "group_fonts", "type": "group", "children": [
+    { "name": "base_font", "type": "font", ... }
+  ]}
+]
+```
+
+**Zugriff in Modul-Fields** via `inheritedValuePropertyValuePaths`:
+```tsx
+<ColorField
+  name="button_color"
+  label="Button Farbe"
+  inheritedValuePropertyValuePaths={{ color: 'theme.group_colors.brand_primary.color' }}
+  default={{ color: '#ff7a59', opacity: 100 }}
+/>
+```
+
+**Zugriff in Modul-Komponente** — kommt über `fieldValues`, nicht `hublParameters`:
+```tsx
+const { button_color } = fieldValues ?? {};
+const primaryColor = button_color?.color;
+// style={{ backgroundColor: primaryColor }}
+```
+
+| Pfad | Bedeutung |
+|---|---|
+| `theme.group_colors.brand_primary.color` | Primärfarbe |
+| `theme.group_colors.brand_accent.color` | Akzentfarbe |
+| `theme.group_fonts.base_font.font` | Schriftart |
 
 ---
 

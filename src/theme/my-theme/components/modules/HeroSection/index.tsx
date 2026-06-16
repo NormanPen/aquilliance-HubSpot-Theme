@@ -1,8 +1,9 @@
-import { ModuleFields, TextField } from '@hubspot/cms-components/fields';
+import { ModuleFields, TextField, ColorField } from '@hubspot/cms-components/fields';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
 export function Component({ fieldValues, hublParameters }: { fieldValues: any; hublParameters: any }) {
-  const { headline, subline, cta_label, cta_url } = fieldValues ?? {};
+  const { headline, subline, cta_label, cta_url, button_color } = fieldValues ?? {};
+  const primaryColor = button_color?.color;
 
   return (
     <ThemeProvider hublParameters={hublParameters}>
@@ -12,6 +13,7 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
         <a
           href={cta_url ?? '#'}
           className="inline-block bg-aq-primary text-white px-8 py-3 rounded font-semibold no-underline font-sans"
+          style={primaryColor ? { backgroundColor: primaryColor } : undefined}
         >
           {cta_label}
         </a>
@@ -41,6 +43,12 @@ export const fields = (
       name="cta_url"
       label="Button URL"
       default="#"
+    />
+    <ColorField
+      name="button_color"
+      label="Button Farbe"
+      inheritedValuePropertyValuePaths={{ color: 'theme.group_colors.brand_primary.color' }}
+      default={{ color: '#ff7a59', opacity: 100 }}
     />
   </ModuleFields>
 );

@@ -12,6 +12,7 @@ export const Default = moduleStory(Component, fields, {
     subline: 'Ihr HubSpot Partner für digitales Wachstum',
     cta_label: 'Jetzt starten',
     cta_url: '#',
+    button_color: { color: '#ff7a59', opacity: 100 },
   },
 });
 

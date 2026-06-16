@@ -7,10 +7,10 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children, hublParameters }: ThemeProviderProps) {
-  const primary = hublParameters?.brand_primary?.color;
-  const accent = hublParameters?.brand_accent?.color;
-  const font = hublParameters?.base_font?.font;
-  const fallback = hublParameters?.base_font?.fallback ?? 'sans-serif';
+  const primary = hublParameters?.group_colors?.brand_primary?.color;
+  const accent = hublParameters?.group_colors?.brand_accent?.color;
+  const font = hublParameters?.group_fonts?.base_font?.font;
+  const fallback = hublParameters?.group_fonts?.base_font?.fallback ?? 'sans-serif';
 
   const overrides = [
     primary && `--color-aq-primary: ${primary};`,
