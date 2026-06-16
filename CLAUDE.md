@@ -84,6 +84,8 @@ Der Dev Server crasht mit `EISDIR` wenn er Unterordner findet.
 ### 6. Beim Erstellen eines Moduls immer auch `.stories.jsx` erstellen
 Ohne separate Nachfrage. Story-Dateien enden auf `.stories.jsx` (nicht `.tsx`).
 Storybook-Titel-Konventionen: `'Sections/...'`, `'Elements/...'`, `'Navigation/...'`, `'Partials/...'`, `'UI/...'`
+- ⚠️ In Story-Dateien relative Imports mit **echter Extension** schreiben (`'./index.tsx'`, `'../shared/ThemeProvider.tsx'`) — Storybooks Vite macht die `.js`→`.tsx`-Auflösung NICHT (anders als der SSR-Build). Mit `.js` → „Failed to resolve import / Failed to fetch dynamically imported module".
+- ⚠️ `<RichText fieldPath>` rendert in Storybook NICHT (Feld bleibt leer); in der SSR-Vorschau (`/preview/module/`) und live aber schon. Für Storybook-Sichtbarkeit eines Textes ggf. `TextField` statt `RichTextField`.
 
 ### 7. Tailwind Build-Pakete gehören in `dependencies`
 HubSpot's Cloud-Build läuft `npm install --omit=dev`. Diese Pakete müssen in `dependencies`:

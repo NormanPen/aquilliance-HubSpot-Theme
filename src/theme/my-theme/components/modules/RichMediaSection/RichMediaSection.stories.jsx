@@ -1,6 +1,10 @@
 import { moduleStory } from '@hubspot/cms-dev-server/storybook';
 import { Component, fields } from './index.tsx';
 
+// ⚠️ Hinweis: <RichText fieldPath="body" /> rendert in Storybook NICHT (der Body
+// bleibt leer). In der echten Dev-Server-Vorschau (/preview/module/) und live
+// rendert er korrekt — bekannte Storybook-Grenze, kein Bug.
+
 export default {
   title: 'Sections/RichMediaSection',
   component: Component,

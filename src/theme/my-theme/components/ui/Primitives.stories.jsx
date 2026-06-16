@@ -1,4 +1,4 @@
-import { ThemeProvider } from '../shared/ThemeProvider.js';
+import { ThemeProvider } from '../shared/ThemeProvider.tsx';
 import { Section } from './Section.tsx';
 import { Container } from './Container.tsx';
 import { Heading } from './Heading.tsx';
