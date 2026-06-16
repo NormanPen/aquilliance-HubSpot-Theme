@@ -53,7 +53,7 @@ Ohne ThemeProvider sind Tailwind-Klassen in der isolierten Dev-Server-Vorschau n
 `<ThemeProvider hublParameters={hublParameters}>` — immer hublParameters übergeben.
 
 ### 3. Export-Pattern — Header/Footer sind MODULE, keine Partials!
-- **Alle deploybaren Komponenten** (inkl. Header/Footer) liegen in `components/modules/` und brauchen: `export function Component` (named) + `export const fields` (bei feldlosen Modulen: `export const fields = <ModuleFields />;`) + `export const meta`.
+- **Alle deploybaren Komponenten** (inkl. Header/Footer) liegen in `components/modules/` und brauchen: `export function Component` (named) + `export const fields` (bei feldlosen Modulen: `export const fields = <ModuleFields>{null}</ModuleFields>;` — NICHT `<ModuleFields />`, da `children` Pflicht ist) + `export const meta`.
 - Ohne `fields` crasht der Dev Server: „Couldn't recognize fields value for module".
 - ⚠️ `components/partials/` (mit `export default`) rendert NUR in der lokalen Dev-Vorschau. Beim Deploy wird es NICHT als Modul gebaut → live erscheint „custom widget definition not found (path: null)". Deshalb: Header/Footer gehören in `modules/`, NICHT in `partials/`. (Hart erkämpft — siehe Memory.)
 
@@ -149,7 +149,7 @@ export function Component({ hublParameters }: { hublParameters: any }) {
   );
 }
 
-export const fields = <ModuleFields />; // feldlos, aber Pflicht-Export
+export const fields = <ModuleFields>{null}</ModuleFields>; // feldlos: {null} statt self-closing (children ist Pflicht)
 
 export const meta = { label: 'Header' };
 ```

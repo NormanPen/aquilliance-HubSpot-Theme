@@ -61,6 +61,7 @@ export const fields = (
     <MenuField name="menu" label="Navigation" />
   </ModuleFields>
 );
+// Header hat Felder als children → kein children-Fehler. Footer (feldlos) braucht {null}.
 
 export const meta = {
   label: 'Header',
