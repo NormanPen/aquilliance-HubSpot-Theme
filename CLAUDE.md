@@ -365,11 +365,15 @@ Alle Imports aus `@hubspot/cms-components/fields`.
 ```tsx
 import { GroupField } from '@hubspot/cms-components/fields';
 <GroupField name="cta" label="Button">
-  <TextField name="label" label="Text" default="Jetzt starten" />
+  <TextField name="link_text" label="Text" default="Jetzt starten" />
   <UrlField name="url" label="URL" default={{ href: '#', type: 'EXTERNAL' }} />
 </GroupField>
-// Zugriff: const { label, url } = fieldValues?.cta ?? {};
+// Zugriff: const { link_text, url } = fieldValues?.cta ?? {};
 ```
+
+> ⚠️ **Reservierte Feldnamen:** `name="label"` ist NICHT erlaubt (Deploy bricht ab:
+> „field name cannot be 'label'"). Auch `name`, `id`, `type`, `css`, `styles` meiden.
+> Beschreibende Namen nutzen (`link_text`, `title`, `headline`, …).
 
 ### RepeatedFieldGroup (wiederholbare Einträge — Features, FAQ, Testimonials)
 ```tsx
