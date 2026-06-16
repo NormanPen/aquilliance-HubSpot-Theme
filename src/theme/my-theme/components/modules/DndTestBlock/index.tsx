@@ -8,7 +8,7 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
   return (
     <ThemeProvider hublParameters={hublParameters}>
       <div
-        className="w-full "
+        className="w-full border-4 border-indigo-600"
         style={{
           backgroundColor: color,
           opacity: opacity / 100,
