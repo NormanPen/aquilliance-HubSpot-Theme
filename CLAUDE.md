@@ -297,8 +297,9 @@ Alle Imports aus `@hubspot/cms-components/fields`.
 
 ### RichTextField
 ```tsx
-<RichTextField name="body" label="Text" default="<p>Inhalt</p>" />
-// Im JSX rendern: <RichText fieldPath="body" /> (aus @hubspot/cms-components)
+<RichTextField name="rich_text" label="Text" default="<p>Inhalt</p>" />
+// Im JSX rendern: <RichText fieldPath="rich_text" /> (aus @hubspot/cms-components)
+// ⚠️ NICHT name="body" — reservierter Name (Deploy bricht ab).
 ```
 
 ### ImageField
@@ -371,9 +372,10 @@ import { GroupField } from '@hubspot/cms-components/fields';
 // Zugriff: const { link_text, url } = fieldValues?.cta ?? {};
 ```
 
-> ⚠️ **Reservierte Feldnamen:** `name="label"` ist NICHT erlaubt (Deploy bricht ab:
-> „field name cannot be 'label'"). Auch `name`, `id`, `type`, `css`, `styles` meiden.
-> Beschreibende Namen nutzen (`link_text`, `title`, `headline`, …).
+> ⚠️ **Reservierte Feldnamen:** `name="label"` und `name="body"` sind NICHT erlaubt
+> (Deploy bricht ab: „field name cannot be 'label'/'body'"). Ebenfalls meiden:
+> `name`, `id`, `type`, `css`, `child_css`, `styles`, `tag`, `path`, `default`.
+> Beschreibende Namen nutzen (`link_text`, `rich_text`, `title`, `headline`, …).
 
 ### RepeatedFieldGroup (wiederholbare Einträge — Features, FAQ, Testimonials)
 ```tsx

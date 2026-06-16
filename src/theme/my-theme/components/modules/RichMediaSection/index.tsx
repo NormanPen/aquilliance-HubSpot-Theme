@@ -23,7 +23,7 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
             <div className="flex-1">
               {headline && <Heading level={2} className="mb-4">{headline}</Heading>}
               <div className="font-sans leading-relaxed text-aq-gray-600">
-                <RichText fieldPath="body" />
+                <RichText fieldPath="rich_text" />
               </div>
               {cta_label && (
                 <Button href={cta_url?.href ?? '#'} className="mt-6">{cta_label}</Button>
@@ -43,7 +43,7 @@ export const fields = (
   <ModuleFields>
     <TextField name="headline" label="Überschrift" default="Über uns" />
     <RichTextField
-      name="body"
+      name="rich_text"
       label="Text"
       default="<p>Beschreiben Sie hier Ihr Angebot. Dieser Bereich unterstützt <strong>Rich-Text</strong> mit Listen, Links und Formatierung.</p>"
     />
