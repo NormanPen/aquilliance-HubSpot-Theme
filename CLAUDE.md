@@ -165,6 +165,37 @@ Einbindung im **Seiten-Template** `templates/home.hubl.html` (NICHT im Layout �
 
 ---
 
+## Interaktive Islands (Client-Side, z.B. Burger-Menü)
+
+HubSpot rendert Module server-seitig statisch — `useState`/`useEffect` brauchen eine **Island** (`components/islands/`). Muster:
+
+```tsx
+// components/islands/MobileNav.tsx  — normale React-Komponente mit Hooks, default export
+import { useState } from 'react';
+export default function MobileNav({ items = [] }: { items?: any[] }) {
+  const [open, setOpen] = useState(false);
+  // ...
+}
+```
+
+Einbindung im Modul über `<Island>` + `?island`-Import (Props müssen serialisierbar sein — z.B. JSON-Daten, keine JSX):
+```tsx
+import { Island } from '@hubspot/cms-components';
+import MobileNav from '../../islands/MobileNav?island';   // ?island-Suffix, KEINE .js-Extension
+
+<Island module={MobileNav} items={items} hydrateOn="load" wrapperTag="div" wrapperClassName="md:hidden" />
+```
+`hydrateOn`: `'load'` | `'visible'` | `'idle'`. Im Unit-Test `@hubspot/cms-components` mocken (Island/useMenu brauchen Render-Context, der in jsdom fehlt).
+
+## HubSpot Menü & Logo im Modul
+
+- **Logo:** `<LogoField name="logo" label="Logo" />` → `fieldValues.logo` = `{ src, alt, width, height }` (erbt aus Brand-Settings, falls leer). Defensive: Fallback rendern wenn kein `src`.
+- **Navigation:** `<MenuField name="menu" label="Navigation" />` (Editor wählt ein HubSpot-Menü). Rendern:
+  - Fertige Komponente: `<Menu fieldPath="menu" tag="ul" className="..." />` (aus `@hubspot/cms-components`), ODER
+  - Volle Tailwind-Kontrolle: `const menu = useMenu(fieldPath('menu'));` → `menu?.pagesTree?.children` = Array von `{ label, url, linkTarget, children }`. Bei keinem Menü → `null` (graceful leeres Array).
+
+---
+
 ## ThemeProvider
 
 ```tsx
