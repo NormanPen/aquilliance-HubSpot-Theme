@@ -430,3 +430,21 @@ als korrekt aufgebaute `dnd_section` / `dnd_column` (`width`/`offset`) / `dnd_ro
 1/3:2/3 (`span4`+`span8`) und 2/3:1/3 (`span8`+`span4`).
 Das passende CSS-Grid (`.row-fluid` / `.span1..12` + Breakpoints) liegt in `styles/global.css`.
 → Für neue Layouts die `dnd_section`-Blöcke von dort kopieren statt neu zu erfinden.
+
+---
+
+## 📚 Referenz: Offizielle HubSpot cms-react Beispiele
+
+Eingecheckter Schnappschuss unter `reference/cms-react/examples/` (Apache 2.0).
+**Bei Fragen zu cms-react-Patterns ZUERST hier nachschauen** statt aus dem Gedächtnis
+oder per WebFetch — der echte Code ist lokal les-/durchsuchbar (`Read`/`Grep`).
+
+Verfügbare Beispiele: `getting-started`, `module-components`, `islands`,
+`styling`, `routing`, `data-fetching`, `graphql-storybook`, `serverless`,
+`contact-profile`, `todo-mvc`, `hello-world`.
+
+⚠️ Generisches cms-react ≠ unser Setup (HubSpot Projects + Tailwind v4 +
+Node16/`.js`-Imports). Als Vorlage abgleichen, **nicht 1:1 kopieren** — mehrere
+unserer Regeln (z.B. Theme-Fields via `inheritedValuePropertyValuePaths` statt
+`hublParameters`) weichen bewusst von der naiven cms-react-Annahme ab.
+Update-Anleitung: `reference/cms-react/README.md`.
