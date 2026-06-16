@@ -2,7 +2,7 @@
 
 ## Projektübersicht
 
-HubSpot CMS React Theme. Module und Partials sind React-Komponenten (TypeScript), Templates sind HUBL-Dateien. Styling via Tailwind CSS v4. Lokale Entwicklung über `@hubspot/cms-dev-server` (Port 3000 + Storybook Port 3123).
+HubSpot CMS React Theme. Module sind React-Komponenten (TypeScript), Templates sind HUBL-Dateien. Styling via Tailwind CSS v4. Lokale Entwicklung über `@hubspot/cms-dev-server` (Port 3000 + Storybook Port 3123).
 
 **Theme-Root:** `src/theme/my-theme/`
 
@@ -13,10 +13,10 @@ HubSpot CMS React Theme. Module und Partials sind React-Komponenten (TypeScript)
 ```
 src/theme/my-theme/
   components/
-    modules/       ← HubSpot-Module (editierbare Felder im Page Editor)
-    partials/      ← Feste Seitenteile ohne Felder (Header, Footer)
+    modules/       ← ALLE über {% module %} eingebundenen Komponenten (auch Header/Footer!) — `export function Component` + `fields`. NUR dieser Ordner wird beim Deploy als adressierbares Modul gebaut.
+    partials/      ← NUR lokale Dev-Vorschau (`/partial/X`). Wird NICHT deployed → live „custom widget definition not found". Nicht für echte Seitenteile verwenden!
     islands/       ← Interaktive Client-Side-Komponenten (useState, useEffect)
-    ui/            ← Reine React-Bausteine, werden von Modulen/Partials importiert
+    ui/            ← Reine React-Bausteine, werden von Modulen importiert
     shared/        ← ThemeProvider, Hooks, Utilities
   styles/
     tailwind.css   ← Einstiegspunkt (@import "tailwindcss" + alle theme/*.css)
@@ -50,14 +50,20 @@ import { ThemeProvider } from '../../shared/ThemeProvider';
 
 ### 2. Jede Komponente muss in `<ThemeProvider>` gewrapped werden
 Ohne ThemeProvider sind Tailwind-Klassen in der isolierten Dev-Server-Vorschau nicht sichtbar.
-- **Module:** `<ThemeProvider hublParameters={hublParameters}>` (immer hublParameters übergeben)
-- **Partials:** `<ThemeProvider>` (ohne hublParameters)
+`<ThemeProvider hublParameters={hublParameters}>` — immer hublParameters übergeben.
 
-### 3. Export-Pattern
-- **Module:** `export function Component` (named export)
-- **Partials:** `export default function Name` (default export)
-- Beide haben `export const meta = { label: '...' }`
-- Module haben zusätzlich `export const fields = (<ModuleFields>...)`
+### 3. Export-Pattern — Header/Footer sind MODULE, keine Partials!
+- **Alle deploybaren Komponenten** (inkl. Header/Footer) liegen in `components/modules/` und brauchen: `export function Component` (named) + `export const fields` (bei feldlosen Modulen: `export const fields = <ModuleFields />;`) + `export const meta`.
+- Ohne `fields` crasht der Dev Server: „Couldn't recognize fields value for module".
+- ⚠️ `components/partials/` (mit `export default`) rendert NUR in der lokalen Dev-Vorschau. Beim Deploy wird es NICHT als Modul gebaut → live erscheint „custom widget definition not found (path: null)". Deshalb: Header/Footer gehören in `modules/`, NICHT in `partials/`. (Hart erkämpft — siehe Memory.)
+
+### 3b. {% module %}-Includes gehören ins SEITEN-Template, nicht ins Layout!
+Es gibt einen Auflösungs-Konflikt bei `{% module path %}`:
+- **HubSpot live** löst `path=` relativ zum gerenderten **Seiten-Template** auf (`templates/home.hubl.html`).
+- **Lokaler Dev Server** löst relativ zur **Datei mit dem Tag** auf — bei einem Tag in `templates/layouts/base.hubl.html` also relativ zu `layouts/`.
+
+→ Ein `{% module %}` in base.hubl.html (layouts/) kann NICHT beide befriedigen (live will `../`, lokal will `../../`).
+→ **Lösung:** Header/Footer/Hero-Includes direkt ins Seiten-Template (`templates/home.hubl.html`) schreiben, mit `path="../components/modules/X"`. Das löst in BEIDEN Umgebungen identisch auf (bewiesen durch `hero_section`). base.hubl.html enthält nur `{% block body %}`.
 
 ### 4. Defensive Destructuring
 Felder können `undefined` sein — immer `?? {}` verwenden:
@@ -124,15 +130,18 @@ export const meta = { label: 'My Module' };
 
 ---
 
-## Partial-Pattern (vollständig)
+## Header/Footer & feldlose Module (vollständig)
+
+Seitenteile wie Header/Footer sind **Module** in `components/modules/` — KEINE Partials. (Der `partials/`-Ordner deployt nicht, siehe Regel 3.)
 
 ```tsx
-// components/partials/MyPartial/index.tsx
+// components/modules/Header/index.tsx
+import { ModuleFields } from '@hubspot/cms-components/fields';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
-export default function MyPartial() {
+export function Component({ hublParameters }: { hublParameters: any }) {
   return (
-    <ThemeProvider>
+    <ThemeProvider hublParameters={hublParameters}>
       <header className="w-full bg-aq-accent px-8 py-4">
         <span className="text-white font-bold text-xl font-sans">aquilliance</span>
       </header>
@@ -140,7 +149,18 @@ export default function MyPartial() {
   );
 }
 
-export const meta = { label: 'My Partial' };
+export const fields = <ModuleFields />; // feldlos, aber Pflicht-Export
+
+export const meta = { label: 'Header' };
+```
+
+Einbindung im **Seiten-Template** `templates/home.hubl.html` (NICHT im Layout — siehe Regel 3b):
+```html
+{% block body %}
+  {% module "header" path="../components/modules/Header" %}
+  {# ... Seiteninhalt / dnd_area ... #}
+  {% module "footer" path="../components/modules/Footer" %}
+{% endblock body %}
 ```
 
 ---
@@ -326,6 +346,8 @@ Alle aus dem Projekt-Root (`/Users/normanpendzich/Projekte/aquilliance HubSpot T
 | `npm run prettier` | Prettier Format-Check inkl. .hubl.html |
 
 Tests aus dem Theme-Verzeichnis: `cd src/theme/my-theme && npm test`
+
+⚠️ **Live-Seiten brauchen nach `npm run deploy` Zeit zum Aktualisieren.** Build-Erfolg ≠ Seite sofort live. Nach einem Deploy kann es etwas dauern, bis Änderungen auf der echten HubSpot-URL erscheinen (CDN/Cache). Beim Verifizieren am Live-System: kurz warten und nicht dem ersten Abruf vertrauen — ggf. mit Cache-Buster (`?v=timestamp`) erneut prüfen.
 
 ---
 

@@ -1,3 +1,31 @@
+/* DnD Area — 12-column Grid (Bootstrap 2 class names, CSS Grid implementation) */
+.row-fluid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.span1  { grid-column: span 1; }
+.span2  { grid-column: span 2; }
+.span3  { grid-column: span 3; }
+.span4  { grid-column: span 4; }
+.span5  { grid-column: span 5; }
+.span6  { grid-column: span 6; }
+.span7  { grid-column: span 7; }
+.span8  { grid-column: span 8; }
+.span9  { grid-column: span 9; }
+.span10 { grid-column: span 10; }
+.span11 { grid-column: span 11; }
+.span12 { grid-column: span 12; }
+
+@media (max-width: 1024px) {
+  .span3, .span4 { grid-column: span 6; }
+}
+
+@media (max-width: 767px) {
+  [class*="span"] { grid-column: span 12; }
+}
+
 h1, h2, h3, h4, h5, h6, p, a, li, span {
   font-family: var(--font-sans);
 }

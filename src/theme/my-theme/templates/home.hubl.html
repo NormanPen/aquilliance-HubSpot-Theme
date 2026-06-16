@@ -7,13 +7,108 @@
 
 {% block body %}
 
-  {% module "header" path="../components/partials/Header" %}
+  {% module "header" path="../components/modules/Header" %}
 
   {% module "hero_section" path="../components/modules/HeroSection" %}
 
   {% dnd_area "main_content" label="Main Content" %}
+
+    {# 1-spaltig #}
+    {% dnd_section %}
+      {% dnd_column width=12, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "test_1col_1" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# 2-spaltig #}
+    {% dnd_section %}
+      {% dnd_column width=6, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "test_2col_1" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=6, offset=6 %}
+        {% dnd_row %}
+          {% dnd_module "test_2col_2" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# 3-spaltig #}
+    {% dnd_section %}
+      {% dnd_column width=4, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "test_3col_1" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=4, offset=4 %}
+        {% dnd_row %}
+          {% dnd_module "test_3col_2" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=4, offset=8 %}
+        {% dnd_row %}
+          {% dnd_module "test_3col_3" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# 4-spaltig #}
+    {% dnd_section %}
+      {% dnd_column width=3, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "test_4col_1" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=3, offset=3 %}
+        {% dnd_row %}
+          {% dnd_module "test_4col_2" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=3, offset=6 %}
+        {% dnd_row %}
+          {% dnd_module "test_4col_3" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=3, offset=9 %}
+        {% dnd_row %}
+          {% dnd_module "test_4col_4" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# 1/3 : 2/3 #}
+    {% dnd_section %}
+      {% dnd_column width=4, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "test_third_twothirds_1" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=8, offset=4 %}
+        {% dnd_row %}
+          {% dnd_module "test_third_twothirds_2" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+    {# 2/3 : 1/3 #}
+    {% dnd_section %}
+      {% dnd_column width=8, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "test_twothirds_third_1" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column width=4, offset=8 %}
+        {% dnd_row %}
+          {% dnd_module "test_twothirds_third_2" path="../components/modules/DndTestBlock" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
   {% end_dnd_area %}
 
-  {% module "footer" path="../components/partials/Footer" %}
+  {% module "footer" path="../components/modules/Footer" %}
 
 {% endblock body %}
