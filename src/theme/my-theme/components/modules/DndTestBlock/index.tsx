@@ -8,11 +8,10 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
   return (
     <ThemeProvider hublParameters={hublParameters}>
       <div
-        className="w-full"
+        className="w-full "
         style={{
           backgroundColor: color,
           opacity: opacity / 100,
-          margin: '10px',
           height: '300px',
         }}
       />

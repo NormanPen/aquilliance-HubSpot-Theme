@@ -5,6 +5,12 @@
   gap: 1.5rem;
 }
 
+/* Grid-Items dürfen unter ihre Content-Mindestbreite schrumpfen — verhindert
+   Grid-Blowout (horizontales Scrollen) bei nicht umbrechbarem Inhalt. */
+.row-fluid > [class*="span"] {
+  min-width: 0;
+}
+
 .span1  { grid-column: span 1; }
 .span2  { grid-column: span 2; }
 .span3  { grid-column: span 3; }

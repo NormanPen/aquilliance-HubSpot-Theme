@@ -1,0 +1,15 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Getting Started - Weather Forecast
+-->
+{% extends "./layouts/base.hubl.html" %}
+
+{% block body %}
+
+  {% module
+    "weather"
+    path="../components/modules/Weather",
+  %}
+
+{% endblock body %}
