@@ -1,0 +1,17 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Home
+-->
+{% extends "./layouts/base.hubl.html" %}
+
+{% block body %}
+
+  {% module "header" path="../components/partials/Header" %}
+
+  {% dnd_area "main_content" label="Main Content" %}
+  {% end_dnd_area %}
+
+  {% module "footer" path="../components/partials/Footer" %}
+
+{% endblock body %}

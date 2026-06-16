@@ -1,0 +1,14 @@
+@theme {
+  /* Brand */
+  --color-aq-primary: #ff7a59;
+  --color-aq-accent: #2d3e50;
+
+  /* Neutrals */
+  --color-aq-white: #ffffff;
+  --color-aq-black: #000000;
+  --color-aq-gray-100: #f5f5f5;
+  --color-aq-gray-200: #e5e5e5;
+  --color-aq-gray-400: #a3a3a3;
+  --color-aq-gray-600: #525252;
+  --color-aq-gray-900: #171717;
+}
