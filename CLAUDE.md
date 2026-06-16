@@ -439,6 +439,17 @@ Tests aus dem Theme-Verzeichnis: `cd src/theme/my-theme && npm test`
 
 ⚠️ **Live-Seiten brauchen nach `npm run deploy` Zeit zum Aktualisieren.** Build-Erfolg ≠ Seite sofort live. Nach einem Deploy kann es etwas dauern, bis Änderungen auf der echten HubSpot-URL erscheinen (CDN/Cache). Beim Verifizieren am Live-System: kurz warten und nicht dem ersten Abruf vertrauen — ggf. mit Cache-Buster (`?v=timestamp`) erneut prüfen.
 
+ℹ️ **`npm audit`-Warnungen beim Deploy sind erwartet & harmlos.** Die ~47 Meldungen stammen
+ALLE aus `@hubspot/cms-dev-server` (HubSpots Dev-Tooling: Storybook/Vite/esbuild) und sind
+**dev-only** — `npm audit --omit=dev` zeigt **0** Schwachstellen, und HubSpot deployt live mit
+`--omit=dev`. Advisory-Status laut npm: „No fix available". `npm audit fix --force` behebt nichts
+(kein Fix verfügbar), würde aber das Setup zerstören → **nicht ausführen**. Behebung kommt erst,
+wenn HubSpot `@hubspot/cms-dev-server` aktualisiert (aktuell `latest` = 1.2.39).
+
+⚠️ **HubSpots Cloud-Build (`hs project upload`) ist strenger als der lokale Dev-Server.** Reservierte
+Feldnamen (`label`, `body`, …) bauen lokal/Storybook/SSR-Preview fehlerfrei, brechen aber den
+Cloud-Build ab. Solche Fehler fallen NUR beim echten Deploy auf.
+
 ---
 
 ## Storybook-Pattern
