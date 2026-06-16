@@ -6,7 +6,7 @@ export default {
   component: Component,
 };
 
-const link = (label) => ({ label, url: { href: '#', type: 'EXTERNAL' } });
+const link = (label) => ({ link_text: label, url: { href: '#', type: 'EXTERNAL' } });
 
 export const Default = moduleStory(Component, fields, {
   fieldValues: {

@@ -23,7 +23,7 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
                     href={item?.url?.href ?? '#'}
                     className="font-sans text-sm text-white/80 no-underline transition-colors hover:text-white"
                   >
-                    {item?.label}
+                    {item?.link_text}
                   </a>
                 ))}
               </nav>
@@ -47,12 +47,12 @@ export const fields = (
       label="Footer-Links"
       occurrence={{ min: 0, max: 12 }}
       default={[
-        { label: 'Impressum', url: { href: '#', type: 'EXTERNAL' } },
-        { label: 'Datenschutz', url: { href: '#', type: 'EXTERNAL' } },
-        { label: 'Kontakt', url: { href: '#', type: 'EXTERNAL' } },
+        { link_text: 'Impressum', url: { href: '#', type: 'EXTERNAL' } },
+        { link_text: 'Datenschutz', url: { href: '#', type: 'EXTERNAL' } },
+        { link_text: 'Kontakt', url: { href: '#', type: 'EXTERNAL' } },
       ]}
     >
-      <TextField name="label" label="Text" default="Link" />
+      <TextField name="link_text" label="Text" default="Link" />
       <UrlField name="url" label="URL" supportedTypes={['EXTERNAL', 'CONTENT', 'EMAIL_ADDRESS', 'FILE']} default={{ href: '#', type: 'EXTERNAL' }} />
     </RepeatedFieldGroup>
     <TextField name="copyright" label="Copyright" default="© 2025 Unternehmen. Alle Rechte vorbehalten." />
