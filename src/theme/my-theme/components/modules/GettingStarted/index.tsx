@@ -6,30 +6,40 @@ import {
 } from '@hubspot/cms-components/fields';
 import { RichText } from '@hubspot/cms-components';
 import logo from '../../../assets/sprocket.svg';
-import styles from '../../../styles/getting-started.module.css';
+import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
-export function Component({ fieldValues, hublParameters }) {
+export function Component({ fieldValues, hublParameters }: { fieldValues: any; hublParameters: any }) {
   const { src, alt, width, height } = fieldValues.logo;
   const { brandColors } = hublParameters;
 
   return (
-    <div
-      className={styles.wrapper}
-      style={{
-        backgroundColor: brandColors?.color,
-        opacity: brandColors?.opacity,
-      }}
-    >
-      <img src={src} alt={alt} width={width} height={height} />
-      <h1>{fieldValues.headline}</h1>
-      <RichText fieldPath="gettingStarted" />
-      <div className={styles.buttons}>
-        <a href="https://github.com/HubSpot/cms-react/tree/main/examples">
-          Examples
-        </a>
-        <a href="https://github.hubspot.com/cms-react/">Read the Docs</a>
+    <ThemeProvider>
+      <div
+        className="font-sans flex items-center justify-center text-center flex-col text-white bg-[#2d3e50] min-h-[500px] h-[50vh]"
+        style={{
+          backgroundColor: brandColors?.color,
+          opacity: brandColors?.opacity,
+        }}
+      >
+        <img src={src} alt={alt} width={width} height={height} />
+        <h1>{fieldValues.headline}</h1>
+        <RichText fieldPath="gettingStarted" />
+        <div className="flex gap-5 items-center justify-center mt-6">
+          <a
+            href="https://github.com/HubSpot/cms-react/tree/main/examples"
+            className="no-underline text-white bg-[#ff7a59] px-5 py-2.5 rounded"
+          >
+            Examples
+          </a>
+          <a
+            href="https://github.hubspot.com/cms-react/"
+            className="no-underline text-white bg-[#ff7a59] px-5 py-2.5 rounded"
+          >
+            Read the Docs
+          </a>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
