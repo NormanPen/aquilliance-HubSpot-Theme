@@ -15,6 +15,27 @@
     {# To see a full list of what is included via standard_footer_includes please reference this article: https://developers.hubspot.com/docs/cms/hubl/variables#required-page-template-variables #}
     <link rel="stylesheet" href="{{ get_asset_url('../../styles/global.css') }}">
     {{ standard_header_includes }}
+    <style>
+      :root {
+        --color-aq-primary: {{ theme.group_colors.brand_primary.color|default('#ff7a59') }};
+        --color-aq-accent:  {{ theme.group_colors.brand_accent.color|default('#2d3e50') }};
+        {% if theme.group_fonts.base_font.font %}
+        --font-sans: '{{ theme.group_fonts.base_font.font }}', {{ theme.group_fonts.base_font.fallback|default('sans-serif') }};
+        {% endif %}
+        --h1-size:   {{ theme.group_fonts.group_headings.h1.size|default(48) }}px;
+        --h1-weight: {{ theme.group_fonts.group_headings.h1.variant|default('700') }};
+        --h2-size:   {{ theme.group_fonts.group_headings.h2.size|default(36) }}px;
+        --h2-weight: {{ theme.group_fonts.group_headings.h2.variant|default('700') }};
+        --h3-size:   {{ theme.group_fonts.group_headings.h3.size|default(30) }}px;
+        --h3-weight: {{ theme.group_fonts.group_headings.h3.variant|default('600') }};
+        --h4-size:   {{ theme.group_fonts.group_headings.h4.size|default(24) }}px;
+        --h4-weight: {{ theme.group_fonts.group_headings.h4.variant|default('600') }};
+        --h5-size:   {{ theme.group_fonts.group_headings.h5.size|default(20) }}px;
+        --h5-weight: {{ theme.group_fonts.group_headings.h5.variant|default('600') }};
+        --h6-size:   {{ theme.group_fonts.group_headings.h6.size|default(16) }}px;
+        --h6-weight: {{ theme.group_fonts.group_headings.h6.variant|default('600') }};
+      }
+    </style>
   </head>
   <body>
     <div class="body-wrapper {{ builtin_body_classes }}">

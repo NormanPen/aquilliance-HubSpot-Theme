@@ -10,28 +10,18 @@
         "name": "brand_primary",
         "type": "color",
         "visibility": {
-          "hidden_subfields": {
-            "opacity": true
-          }
+          "hidden_subfields": { "opacity": true }
         },
-        "default": {
-          "color": "#ff7a59",
-          "opacity": 100
-        }
+        "default": { "color": "#ff7a59", "opacity": 100 }
       },
       {
         "label": "Akzentfarbe (Dunkel)",
         "name": "brand_accent",
         "type": "color",
         "visibility": {
-          "hidden_subfields": {
-            "opacity": true
-          }
+          "hidden_subfields": { "opacity": true }
         },
-        "default": {
-          "color": "#2d3e50",
-          "opacity": 100
-        }
+        "default": { "color": "#2d3e50", "opacity": 100 }
       }
     ]
   },
@@ -42,7 +32,7 @@
     "display": "inline",
     "children": [
       {
-        "label": "Schriftart",
+        "label": "Basis-Schriftart",
         "name": "base_font",
         "type": "font",
         "visibility": {
@@ -62,6 +52,164 @@
           "fallback": "sans-serif",
           "google_font_variants": ["400", "400i", "600", "600i", "700"]
         }
+      },
+      {
+        "label": "Überschriften",
+        "name": "group_headings",
+        "type": "group",
+        "display": "inline",
+        "children": [
+          {
+            "label": "H1",
+            "name": "h1",
+            "type": "font",
+            "visibility": {
+              "hidden_subfields": {
+                "font": true,
+                "font_set": true,
+                "fallback": true,
+                "color": true,
+                "bold": true,
+                "italic": true,
+                "underline": true,
+                "styles": true
+              }
+            },
+            "inherited_value": {
+              "property_value_paths": {
+                "font": "theme.group_fonts.base_font.font",
+                "font_set": "theme.group_fonts.base_font.font_set",
+                "fallback": "theme.group_fonts.base_font.fallback"
+              }
+            },
+            "default": { "size": 48, "variant": "700" }
+          },
+          {
+            "label": "H2",
+            "name": "h2",
+            "type": "font",
+            "visibility": {
+              "hidden_subfields": {
+                "font": true,
+                "font_set": true,
+                "fallback": true,
+                "color": true,
+                "bold": true,
+                "italic": true,
+                "underline": true,
+                "styles": true
+              }
+            },
+            "inherited_value": {
+              "property_value_paths": {
+                "font": "theme.group_fonts.base_font.font",
+                "font_set": "theme.group_fonts.base_font.font_set",
+                "fallback": "theme.group_fonts.base_font.fallback"
+              }
+            },
+            "default": { "size": 36, "variant": "700" }
+          },
+          {
+            "label": "H3",
+            "name": "h3",
+            "type": "font",
+            "visibility": {
+              "hidden_subfields": {
+                "font": true,
+                "font_set": true,
+                "fallback": true,
+                "color": true,
+                "bold": true,
+                "italic": true,
+                "underline": true,
+                "styles": true
+              }
+            },
+            "inherited_value": {
+              "property_value_paths": {
+                "font": "theme.group_fonts.base_font.font",
+                "font_set": "theme.group_fonts.base_font.font_set",
+                "fallback": "theme.group_fonts.base_font.fallback"
+              }
+            },
+            "default": { "size": 30, "variant": "600" }
+          },
+          {
+            "label": "H4",
+            "name": "h4",
+            "type": "font",
+            "visibility": {
+              "hidden_subfields": {
+                "font": true,
+                "font_set": true,
+                "fallback": true,
+                "color": true,
+                "bold": true,
+                "italic": true,
+                "underline": true,
+                "styles": true
+              }
+            },
+            "inherited_value": {
+              "property_value_paths": {
+                "font": "theme.group_fonts.base_font.font",
+                "font_set": "theme.group_fonts.base_font.font_set",
+                "fallback": "theme.group_fonts.base_font.fallback"
+              }
+            },
+            "default": { "size": 24, "variant": "600" }
+          },
+          {
+            "label": "H5",
+            "name": "h5",
+            "type": "font",
+            "visibility": {
+              "hidden_subfields": {
+                "font": true,
+                "font_set": true,
+                "fallback": true,
+                "color": true,
+                "bold": true,
+                "italic": true,
+                "underline": true,
+                "styles": true
+              }
+            },
+            "inherited_value": {
+              "property_value_paths": {
+                "font": "theme.group_fonts.base_font.font",
+                "font_set": "theme.group_fonts.base_font.font_set",
+                "fallback": "theme.group_fonts.base_font.fallback"
+              }
+            },
+            "default": { "size": 20, "variant": "600" }
+          },
+          {
+            "label": "H6",
+            "name": "h6",
+            "type": "font",
+            "visibility": {
+              "hidden_subfields": {
+                "font": true,
+                "font_set": true,
+                "fallback": true,
+                "color": true,
+                "bold": true,
+                "italic": true,
+                "underline": true,
+                "styles": true
+              }
+            },
+            "inherited_value": {
+              "property_value_paths": {
+                "font": "theme.group_fonts.base_font.font",
+                "font_set": "theme.group_fonts.base_font.font_set",
+                "fallback": "theme.group_fonts.base_font.fallback"
+              }
+            },
+            "default": { "size": 16, "variant": "600" }
+          }
+        ]
       }
     ]
   }
