@@ -310,10 +310,15 @@ Alle Imports aus `@hubspot/cms-components/fields`.
 // Zugriff: const { src, alt, width, height } = fieldValues?.image ?? {};
 ```
 
-### URLField
+### UrlField
 ```tsx
-<URLField name="cta_url" label="Link" default={{ href: '#', type: 'EXTERNAL' }} />
+<UrlField
+  name="cta_url" label="Link"
+  supportedTypes={['EXTERNAL', 'CONTENT', 'EMAIL_ADDRESS', 'FILE']}
+  default={{ href: '#', type: 'EXTERNAL' }}
+/>
 // Zugriff: fieldValues?.cta_url?.href
+// ⚠️ Export heißt UrlField (nicht URLField). `supportedTypes` ist vom TS-Typ verlangt.
 ```
 
 ### NumberField
@@ -359,10 +364,55 @@ Alle Imports aus `@hubspot/cms-components/fields`.
 import { GroupField } from '@hubspot/cms-components/fields';
 <GroupField name="cta" label="Button">
   <TextField name="label" label="Text" default="Jetzt starten" />
-  <URLField name="url" label="URL" default={{ href: '#', type: 'EXTERNAL' }} />
+  <UrlField name="url" label="URL" default={{ href: '#', type: 'EXTERNAL' }} />
 </GroupField>
 // Zugriff: const { label, url } = fieldValues?.cta ?? {};
 ```
+
+### RepeatedFieldGroup (wiederholbare Einträge — Features, FAQ, Testimonials)
+```tsx
+import { RepeatedFieldGroup } from '@hubspot/cms-components/fields';
+<RepeatedFieldGroup name="features" label="Features" occurrence={{ min: 1, max: 12, default: 3 }}>
+  <ImageField name="icon" label="Icon" resizable={true} default={{ src: '', alt: '', width: 0, height: 0 }} />
+  <TextField name="title" label="Titel" default="Titel" />
+  <TextField name="text" label="Text" default="Beschreibung" />
+</RepeatedFieldGroup>
+// Zugriff: const items = fieldValues?.features ?? [];  → Array von { icon, title, text }
+// In Story: fieldValues.features = [{ icon:{src,alt,width,height}, title, text }, ...]
+// ⚠️ In wiederholten Items KEIN <RichText fieldPath>/<Icon fieldPath> (Index-Pfad-Problem) —
+//    plain TextField/ImageField nutzen und aus item.* rendern.
+```
+
+### Field Visibility (Felder bedingt ein-/ausblenden)
+```tsx
+<ChoiceField name="layout" label="Layout" default="grid" choices={[['grid','Grid'],['slider','Slider']]} />
+<NumberField
+  name="columns" label="Spalten" default={3}
+  visibility={{ controlling_field_path: 'layout', controlling_value_regex: 'grid', operator: 'EQUAL' }}
+/>
+```
+
+---
+
+## UI-Primitives (`components/ui/`) — IMMER zuerst wiederverwenden
+
+Statt in jedem Modul Inline-Tailwind-Klassen zu wiederholen, die geteilten Bausteine nutzen.
+Import: `import { Section, Container, Heading, Text, Button } from '../../ui/index.js';`
+
+| Primitive | Props (Auswahl) | Zweck |
+|---|---|---|
+| `Section` | `bg` (`none`/`white`/`gray`/`accent`/`primary`), `padding` (`sm`/`md`/`lg`), `as`, `style` | Vollbreite Sektion + Hintergrund + vertikales Padding |
+| `Container` | `size` (`sm`/`md`/`lg`/`full`), `as` | Zentrierter Wrapper mit Maximalbreite + horizontalem Padding |
+| `Heading` | `level` (1–6), `as` | Responsive, token-basierte Überschrift |
+| `Text` | `size` (`sm`/`base`/`lg`/`xl`), `muted` | Absatz |
+| `Button` | `href`, `variant` (`primary`/`secondary`/`outline`/`ghost`), `size`, `style` | Link-Button für CTAs |
+
+**Regeln:**
+- Primitives wrappen sich NICHT in `<ThemeProvider>` — das macht das umgebende Modul.
+- Dynamische Werte (editierbare Farben aus `fieldValues`) über `style={{}}` an `Section`/`Button` geben, nicht über Klassen.
+- Neue gängige Bausteine (Card, Badge …) gehören hierher, nicht copy-paste ins Modul.
+- Aufbau eines Moduls: `<ThemeProvider><Section><Container>…Heading/Text/Button…</Container></Section></ThemeProvider>`.
+- Vorlagen-Module mit Repeatern/Primitives: `HeroSection`, `FeatureGrid`, `CtaBanner`, `Testimonials`, `RichMediaSection`, `FaqAccordion` (Island).
 
 ---
 

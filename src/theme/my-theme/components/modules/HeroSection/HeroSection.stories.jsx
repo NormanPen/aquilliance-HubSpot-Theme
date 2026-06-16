@@ -8,10 +8,22 @@ export default {
 
 export const Default = moduleStory(Component, fields, {
   fieldValues: {
-    headline: 'Willkommen bei aquilliance',
-    subline: 'Ihr HubSpot Partner für digitales Wachstum',
+    headline: 'Ihre Überschrift hier',
+    subline: 'Ein kurzer, prägnanter Satz, der Ihr Angebot beschreibt.',
     cta_label: 'Jetzt starten',
-    cta_url: '#',
+    cta_url: { href: '#', type: 'EXTERNAL' },
+    align: 'center',
+    button_color: { color: '#ff7a59', opacity: 100 },
+  },
+});
+
+export const LeftAligned = moduleStory(Component, fields, {
+  fieldValues: {
+    headline: 'Linksbündige Variante',
+    subline: 'Dieselbe Komponente, andere Ausrichtung — gesteuert über ein ChoiceField.',
+    cta_label: 'Mehr erfahren',
+    cta_url: { href: '#', type: 'EXTERNAL' },
+    align: 'left',
     button_color: { color: '#ff7a59', opacity: 100 },
   },
 });
@@ -22,7 +34,8 @@ export const CustomColors = moduleStory(Component, fields, {
     headline: 'Custom Theme Colors',
     subline: 'Primärfarbe: Grün — Akzentfarbe: Lila',
     cta_label: 'Button Test',
-    cta_url: '#',
+    cta_url: { href: '#', type: 'EXTERNAL' },
+    align: 'center',
   },
   hublParameters: {
     brand_primary: { color: '#22c55e' },

@@ -1,16 +1,37 @@
 <!--
   templateType: page
   isAvailableForNewContent: true
-  label: Getting started with CMS React
+  label: Starter Page
 -->
+{#
+  Starter-Seitentemplate. Header/Hero/Footer als feste Module,
+  dazwischen eine DnD-Area, in die Redakteure Module ziehen.
+  {% module %}-Includes gehören ins SEITEN-Template (siehe CLAUDE.md Regel 3b).
+  Vorbefüllte dnd_section dienen als Beispiel — frei änder-/löschbar.
+#}
 {% extends "./layouts/base.hubl.html" %}
 
 {% block body %}
 
-  {% module
-    "gettingStarted"
-    path="../components/modules/GettingStarted",
-    brandColors="{{ theme.brand_color }}",
-  %}
+  {% module "header" path="../components/modules/Header" %}
+
+  {% module "hero" path="../components/modules/HeroSection" %}
+
+  {% dnd_area "content" label="Inhalt" %}
+
+    {% dnd_section %}
+      {% dnd_column width=12, offset=0 %}
+        {% dnd_row %}
+          {% dnd_module "features" path="../components/modules/FeatureGrid" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+        {% dnd_row %}
+          {% dnd_module "cta" path="../components/modules/CtaBanner" %}{% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_section %}
+
+  {% end_dnd_area %}
+
+  {% module "footer" path="../components/modules/Footer" %}
 
 {% endblock body %}

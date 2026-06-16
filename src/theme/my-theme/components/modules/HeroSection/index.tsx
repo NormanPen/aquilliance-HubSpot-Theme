@@ -1,48 +1,51 @@
-import { ModuleFields, TextField, ColorField } from '@hubspot/cms-components/fields';
+import { ModuleFields, TextField, UrlField, ColorField, ChoiceField } from '@hubspot/cms-components/fields';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
+import { Section, Container, Heading, Text, Button } from '../../ui/index.js';
+
+const alignMap: Record<string, string> = {
+  center: 'text-center items-center',
+  left: 'text-left items-start',
+};
 
 export function Component({ fieldValues, hublParameters }: { fieldValues: any; hublParameters: any }) {
-  const { headline, subline, cta_label, cta_url, button_color } = fieldValues ?? {};
+  const { headline, subline, cta_label, cta_url, button_color, align } = fieldValues ?? {};
   const primaryColor = button_color?.color;
+  const alignClasses = alignMap[align] ?? alignMap.center;
 
   return (
     <ThemeProvider hublParameters={hublParameters}>
-      <section className="w-full bg-aq-accent py-24 px-8 text-center">
-        <h1 className="text-white text-5xl font-bold mb-4 font-sans">{headline}</h1>
-        <p className="text-white/80 text-xl mb-10 font-sans">{subline}</p>
-        <a
-          href={cta_url ?? '#'}
-          className="inline-block bg-aq-primary text-white px-8 py-3 rounded font-semibold no-underline font-sans"
-          style={primaryColor ? { backgroundColor: primaryColor } : undefined}
-        >
-          {cta_label}
-        </a>
-      </section>
+      <Section bg="accent" padding="lg">
+        <Container size="md">
+          <div className={`flex flex-col ${alignClasses}`}>
+            <Heading level={1} className="mb-4 text-white">{headline}</Heading>
+            {subline && <Text size="xl" className="mb-10 max-w-2xl text-white/80">{subline}</Text>}
+            {cta_label && (
+              <Button
+                href={cta_url?.href ?? '#'}
+                style={primaryColor ? { backgroundColor: primaryColor } : undefined}
+              >
+                {cta_label}
+              </Button>
+            )}
+          </div>
+        </Container>
+      </Section>
     </ThemeProvider>
   );
 }
 
 export const fields = (
   <ModuleFields>
-    <TextField
-      name="headline"
-      label="Überschrift"
-      default="Willkommen bei aquilliance"
-    />
-    <TextField
-      name="subline"
-      label="Subline"
-      default="Ihr HubSpot Partner für digitales Wachstum"
-    />
-    <TextField
-      name="cta_label"
-      label="Button Text"
-      default="Jetzt starten"
-    />
-    <TextField
-      name="cta_url"
-      label="Button URL"
-      default="#"
+    <TextField name="headline" label="Überschrift" default="Ihre Überschrift hier" />
+    <TextField name="subline" label="Subline" default="Ein kurzer, prägnanter Satz, der Ihr Angebot beschreibt." />
+    <TextField name="cta_label" label="Button Text" default="Jetzt starten" />
+    <UrlField name="cta_url" label="Button URL" supportedTypes={['EXTERNAL', 'CONTENT', 'EMAIL_ADDRESS', 'FILE']} default={{ href: '#', type: 'EXTERNAL' }} />
+    <ChoiceField
+      name="align"
+      label="Ausrichtung"
+      display="radio"
+      default="center"
+      choices={[['center', 'Mittig'], ['left', 'Linksbündig']]}
     />
     <ColorField
       name="button_color"

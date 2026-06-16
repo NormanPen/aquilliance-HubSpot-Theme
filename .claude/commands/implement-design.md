@@ -9,6 +9,13 @@ Identifiziere:
 - Welche Inhaltsbereiche gibt es? (Überschrift, Text, Bild, Button, Liste, etc.)
 - Welche Bereiche soll der HubSpot-Editor ändern können?
 - Gibt es klar trennbare Sektionen → mehrere Module? Oder eine zusammenhängende Sektion → ein Modul?
+- **Passt ein bestehendes Modul?** Vor dem Neubau prüfen, ob `HeroSection`, `FeatureGrid`, `CtaBanner`, `Testimonials`, `RichMediaSection` oder `FaqAccordion` das Muster schon abdecken (ggf. nur anpassen).
+- **Wiederholt sich ein Element** (Karten, Logos, Schritte)? → `RepeatedFieldGroup`.
+
+## Bausteine wiederverwenden
+
+- **UI-Primitives** (`components/ui/`): `Section`, `Container`, `Heading`, `Text`, `Button` — IMMER zuerst nutzen statt Inline-Tailwind. Import: `import { Section, Container, Heading, Text, Button } from '../../ui/index.js';`
+- **Referenz**: Offizielle Patterns liegen lokal unter `reference/cms-react/examples/` — bei Unsicherheit (Islands, Daten-Fetching) dort nachschauen.
 
 ---
 
@@ -20,7 +27,7 @@ Identifiziere:
 | Fließtext/Paragraph | `TextField` oder `RichTextField` |
 | HTML-Inhalt mit Formatierung | `RichTextField` + `<RichText fieldPath="..." />` |
 | Bild | `ImageField` mit `resizable={true}` |
-| Button-Text + URL | `TextField` (Label) + `URLField` (URL) oder `GroupField` |
+| Button-Text + URL | `TextField` (Label) + `UrlField` (URL) oder `GroupField` |
 | Toggle/Feature an/aus | `BooleanField` mit `display="toggle"` |
 | Farbe editierbar | `ColorField` |
 | Auswahl (Layout, Stil) | `ChoiceField` mit `choices={[['wert', 'Label'], ...]}` |
@@ -53,7 +60,7 @@ Identifiziere:
 ## Modul-Template
 
 ```tsx
-import { ModuleFields, TextField, ImageField, URLField, BooleanField, ChoiceField, RichTextField, ColorField, GroupField, NumberField } from '@hubspot/cms-components/fields';
+import { ModuleFields, TextField, ImageField, UrlField, BooleanField, ChoiceField, RichTextField, ColorField, GroupField, NumberField } from '@hubspot/cms-components/fields';
 import { RichText } from '@hubspot/cms-components';
 import { ThemeProvider } from '../../shared/ThemeProvider.js';
 
