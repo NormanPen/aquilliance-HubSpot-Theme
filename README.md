@@ -41,6 +41,23 @@ Nach dem Start:
 > **Hinweis:** `hslocal.net` muss einmalig in der Hosts-Datei eingetragen werden.  
 > Siehe [Setup-Dokumentation](docs/setup.md#hslocal-net-konfigurieren).
 
+### 6. Playwright (visuelles Testen) aktivieren — einmalig
+
+Das Repo bringt einen **Headless-Browser** mit, mit dem Claude Module visuell abnehmen kann.
+Den MCP-Server musst du **nicht manuell starten** — Claude Code startet ihn automatisch aus der
+mitgelieferten `.mcp.json`. Du musst nur **einmal pro Klon**:
+
+1. Claude Code im Projekt öffnen → beim Start fragt es, ob dem MCP-Server `playwright` aus
+   `.mcp.json` **vertraut** werden soll → **bestätigen**.
+2. Claude Code **einmal vollständig neu starten** (kein bloßer Reconnect), damit die Browser-Tools
+   geladen werden. Der erste Lauf lädt Chromium (~93 MB, einmalig).
+3. Mit `/mcp` prüfen: `playwright` = „connected".
+
+Danach: Dev-Server laufen lassen (`npm run start`) und Claude bitten:
+**„mach die visuelle Abnahme von HeroSection"** bzw. `/visual-check HeroSection`.
+
+→ Volle Anleitung & Workflow (Figma → Modul → Test): [Visuelles Testen](docs/visual-testing.md).
+
 ## Dokumentation
 
 | Dokument | Inhalt |

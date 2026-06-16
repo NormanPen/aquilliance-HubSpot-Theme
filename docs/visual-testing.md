@@ -11,6 +11,11 @@ Das ergänzt Lint/Vitest, die nur Code, nicht das gerenderte Ergebnis prüfen.
 - Open Source (Microsoft), **gratis, kein Konto**, läuft komplett lokal. Schickt nichts an externe Server.
 - Screenshots landen in `.playwright-mcp/` — **ge-gitignored** (Wegwerf-Artefakte).
 
+> **Muss ich den MCP-Server manuell starten? Nein.** Claude Code liest beim Start `.mcp.json`
+> und startet den Playwright-Server selbst (via `npx @playwright/mcp@latest`). Das ist **unabhängig**
+> von `npm run start` (das ist der HubSpot-Dev-Server/Storybook). Du startest also nichts von Hand —
+> du bestätigst beim ersten Mal nur das Vertrauen und startest Claude Code einmal neu (siehe unten).
+
 ## Einmalige Einrichtung pro Entwickler/Klon
 
 1. Repo klonen, `npm install` (Root) + `cd src/theme/my-theme && npm install`.
