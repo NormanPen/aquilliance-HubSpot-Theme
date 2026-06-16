@@ -28,7 +28,8 @@ src/theme/my-theme/
       animations.css   ← @keyframes + @theme { --animate-* }
   templates/
     layouts/base.hubl.html
-    home.hubl.html
+    page.hubl.html          ← Standard-Page-Template
+    grid-example.hubl.html  ← BEISPIEL/Referenz: alle DnD-Grid-Layouts (siehe unten)
   fields.json    ← Globale Theme-Settings (editierbar im HubSpot Backend)
   package.json
 ```
@@ -412,10 +413,20 @@ export const CustomColors = moduleStory(Component, fields, {
 
 ---
 
-## Partials in HUBL-Templates einbinden
+## Module in HUBL-Templates einbinden
 
 ```html
-{% module "header" path="../components/partials/Header" %}
+{% module "header" path="../components/modules/Header" %}
 {% module "hero" path="../components/modules/HeroSection" %}
 {% dnd_area "main_content" label="Main Content" %}{% end_dnd_area %}
 ```
+
+## 📐 Beispiel-/Referenz-Template: `templates/grid-example.hubl.html`
+
+**Beim Erstellen neuer Seiten-Templates oder DnD-Grid-Layouts ZUERST hier nachschauen.**
+`templates/grid-example.hubl.html` ist die fertige Referenz: Es zeigt ALLE HubSpot "Blank Layouts"
+als korrekt aufgebaute `dnd_section` / `dnd_column` (`width`/`offset`) / `dnd_row` / `dnd_module`:
+1-spaltig (`span12`), 2-spaltig (`span6`×2), 3-spaltig (`span4`×3), 4-spaltig (`span3`×4),
+1/3:2/3 (`span4`+`span8`) und 2/3:1/3 (`span8`+`span4`).
+Das passende CSS-Grid (`.row-fluid` / `.span1..12` + Breakpoints) liegt in `styles/global.css`.
+→ Für neue Layouts die `dnd_section`-Blöcke von dort kopieren statt neu zu erfinden.
