@@ -55,7 +55,16 @@ export const fields = (
       default="3"
       choices={[['2', '2 Spalten'], ['3', '3 Spalten'], ['4', '4 Spalten']]}
     />
-    <RepeatedFieldGroup name="features" label="Features" occurrence={{ min: 1, max: 12, default: 3 }}>
+    <RepeatedFieldGroup
+      name="features"
+      label="Features"
+      occurrence={{ min: 1, max: 12 }}
+      default={[
+        { title: 'Schnell', text: 'In wenigen Minuten startklar.' },
+        { title: 'Flexibel', text: 'Beliebig viele Einträge per Repeater.' },
+        { title: 'Konsistent', text: 'Nutzt die geteilten UI-Primitives.' },
+      ]}
+    >
       <ImageField name="icon" label="Icon / Bild" resizable={true} default={{ src: '', alt: '', width: 0, height: 0 }} />
       <TextField name="title" label="Titel" default="Feature-Titel" />
       <TextField name="text" label="Beschreibung" default="Kurze Beschreibung des Features." />

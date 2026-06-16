@@ -24,7 +24,16 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
 export const fields = (
   <ModuleFields>
     <TextField name="headline" label="Überschrift" default="Häufige Fragen" />
-    <RepeatedFieldGroup name="items" label="Fragen" occurrence={{ min: 1, max: 20, default: 3 }}>
+    <RepeatedFieldGroup
+      name="items"
+      label="Fragen"
+      occurrence={{ min: 1, max: 20 }}
+      default={[
+        { question: 'Wie schnell bin ich startklar?', answer: 'In wenigen Minuten nach dem Klonen.' },
+        { question: 'Kann ich eigene Module bauen?', answer: 'Ja — per /create-module oder /implement-design.' },
+        { question: 'Ist das responsiv?', answer: 'Ja, alle Module nutzen die geteilten Primitives.' },
+      ]}
+    >
       <TextField name="question" label="Frage" default="Eine häufig gestellte Frage?" />
       <TextField name="answer" label="Antwort" default="Die passende Antwort darauf." />
     </RepeatedFieldGroup>

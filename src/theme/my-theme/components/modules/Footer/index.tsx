@@ -42,7 +42,16 @@ export const fields = (
   <ModuleFields>
     <TextField name="company_name" label="Firmenname" default="Unternehmen" />
     <TextField name="tagline" label="Tagline" default="Ein kurzer Claim." />
-    <RepeatedFieldGroup name="links" label="Footer-Links" occurrence={{ min: 0, max: 12, default: 3 }}>
+    <RepeatedFieldGroup
+      name="links"
+      label="Footer-Links"
+      occurrence={{ min: 0, max: 12 }}
+      default={[
+        { label: 'Impressum', url: { href: '#', type: 'EXTERNAL' } },
+        { label: 'Datenschutz', url: { href: '#', type: 'EXTERNAL' } },
+        { label: 'Kontakt', url: { href: '#', type: 'EXTERNAL' } },
+      ]}
+    >
       <TextField name="label" label="Text" default="Link" />
       <UrlField name="url" label="URL" supportedTypes={['EXTERNAL', 'CONTENT', 'EMAIL_ADDRESS', 'FILE']} default={{ href: '#', type: 'EXTERNAL' }} />
     </RepeatedFieldGroup>

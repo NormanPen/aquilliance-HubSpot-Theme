@@ -44,7 +44,16 @@ export function Component({ fieldValues, hublParameters }: { fieldValues: any; h
 export const fields = (
   <ModuleFields>
     <TextField name="headline" label="Überschrift" default="Das sagen unsere Kunden" />
-    <RepeatedFieldGroup name="testimonials" label="Stimmen" occurrence={{ min: 1, max: 12, default: 3 }}>
+    <RepeatedFieldGroup
+      name="testimonials"
+      label="Stimmen"
+      occurrence={{ min: 1, max: 12 }}
+      default={[
+        { quote: 'Schnelle Umsetzung, top Ergebnis.', author: 'Anna Becker', role: 'Marketing, Muster GmbH' },
+        { quote: 'Genau das, was wir gesucht haben.', author: 'Tom Richter', role: 'CEO, Beispiel AG' },
+        { quote: 'Klare Empfehlung.', author: 'Lisa Wagner', role: 'Produkt, Demo KG' },
+      ]}
+    >
       <TextField name="quote" label="Zitat" default="Ein begeistertes Kundenzitat steht hier." />
       <TextField name="author" label="Name" default="Vorname Nachname" />
       <TextField name="role" label="Rolle / Firma" default="Position, Unternehmen" />
