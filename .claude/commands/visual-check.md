@@ -23,7 +23,8 @@ Die `browser_*`-Tools kommen vom projekt-scoped Playwright-MCP-Server (`.mcp.jso
 4. **Rendern — zwei Oberflächen, je nach Zweck:**
    - **Storybook** (Komponenten-Vorschau, alle Varianten): `http://localhost:3123/iframe.html?id=<story-id>&viewMode=story`
    - **SSR-Preview** (produktionsnah, server-gerendert): `http://hslocal.net:3000/preview/module/<ModulName>`
-   - `browser_navigate` → `browser_take_screenshot` (filename z.B. `<modul>.png`) → das PNG mit `Read` ansehen und das Layout bewerten.
+   - `browser_navigate` → `browser_take_screenshot` → das PNG mit `Read` ansehen und das Layout bewerten.
+   - ⚠️ **`filename` IMMER mit Ordner-Präfix übergeben**: `.playwright-mcp/<modul>-<variante>.png` (z.B. `.playwright-mcp/herosection-default.png`). Ein nackter Dateiname (`herosection.png`) landet im **Projekt-Root** (nicht ge-gitignored, müsste manuell weggeräumt werden). Der `filename` wird relativ zum Projekt-Root aufgelöst — `--output-dir` in `.mcp.json` steuert nur die automatischen Snapshots/Logs, NICHT den expliziten Screenshot-`filename`. Der `.playwright-mcp/`-Ordner ist bereits ge-gitignored.
 
 5. **Konsole prüfen**: `browser_console_messages` (level error). **Harmlos ignorieren**: `favicon.ico 404` und `Failed to resolve module specifier "@hubspot/cms-components/config"` (Storybook-Eigenheit). Alles andere ist relevant.
 
@@ -37,4 +38,4 @@ Die `browser_*`-Tools kommen vom projekt-scoped Playwright-MCP-Server (`.mcp.jso
 - Story-Imports brauchen **echte Extension** (`.tsx`), nicht `.js` — sonst „Failed to fetch dynamically imported module".
 
 ## Aufräumen
-Screenshots landen in `.playwright-mcp/` bzw. im Theme-Ordner — sind ge-gitignored, müssen nicht eingecheckt werden. Nach der Abnahme `browser_close`.
+Screenshots mit `.playwright-mcp/`-Präfix (siehe Schritt 4) landen im ge-gitignored Ordner — müssen nicht eingecheckt werden. Nach der Abnahme `browser_close`.
