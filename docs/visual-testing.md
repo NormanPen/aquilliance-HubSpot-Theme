@@ -9,7 +9,7 @@ Das ergänzt Lint/Vitest, die nur Code, nicht das gerenderte Ergebnis prüfen.
 - **`.mcp.json`** (im Repo, committet) registriert den projekt-scoped **Playwright-MCP-Server**.
   Jeder Klon bekommt die Fähigkeit automatisch — nichts global installieren.
 - Open Source (Microsoft), **gratis, kein Konto**, läuft komplett lokal. Schickt nichts an externe Server.
-- Screenshots landen in `.playwright-mcp/` — **ge-gitignored** (Wegwerf-Artefakte).
+- Screenshots landen im Ordner **`.playwright-mcp/`** im Projekt-Root — **ge-gitignored** (Wegwerf-Artefakte, siehe „Wo finde ich die Screenshots?").
 
 > **Muss ich den MCP-Server manuell starten? Nein.** Claude Code liest beim Start `.mcp.json`
 > und startet den Playwright-Server selbst (via `npx @playwright/mcp@latest`). Das ist **unabhängig**
@@ -48,6 +48,25 @@ Dann Claude bitten, z.B.:
 | SSR-Preview | `http://hslocal.net:3000/preview/module/<ModulName>` | Produktionsnah, server-gerendert |
 
 Story-IDs auflisten: `curl -s http://localhost:3123/index.json`.
+
+### Wo finde ich die Screenshots?
+
+Alle Bilder, Konsolen-Logs und Snapshots liegen im Ordner **`.playwright-mcp/`** im Projekt-Root:
+
+```bash
+ls -la .playwright-mcp/        # *.png (Screenshots), *.log (Konsole), *.yml (DOM-Snapshots)
+open .playwright-mcp/          # macOS: im Finder öffnen
+```
+
+Der Ordner ist **ge-gitignored** — die Bilder werden nicht eingecheckt und sind reine
+Wegwerf-Artefakte. Sie überschreiben/sammeln sich über Läufe hinweg; bei Bedarf einfach löschen
+(`rm .playwright-mcp/*.png`).
+
+> ⚠️ **Für die KI (Konvention):** Screenshots **immer** mit `.playwright-mcp/`-Präfix im
+> `filename` speichern (z.B. `.playwright-mcp/herosection-desktop.png`). Ein nackter Dateiname
+> landet sonst im **Projekt-Root** (nicht ge-gitignored). Der `--output-dir`-Schalter in `.mcp.json`
+> steuert nur die automatischen Snapshots/Logs, **nicht** den expliziten Screenshot-`filename`.
+> Der `/visual-check`-Skill macht das bereits korrekt.
 
 ## Der Workflow: Figma → Modul → Test
 
